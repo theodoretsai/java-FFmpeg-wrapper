@@ -5,6 +5,11 @@ import lombok.Getter;
 
 import java.util.List;
 
+/**
+ * Represents a singlevideo stream
+ * [x:v:x]
+ */
+
 @Getter
 public class VideoParam extends VisualParam {
 

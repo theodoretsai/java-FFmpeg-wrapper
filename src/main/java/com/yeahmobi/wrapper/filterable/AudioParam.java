@@ -4,6 +4,9 @@ package com.yeahmobi.wrapper.filterable;
 import com.yeahmobi.wrapper.FFmpegCommand;
 import lombok.Getter;
 
+/**
+ * Represents a single [x:a:x] audio stream.
+ */
 @Getter
 public class AudioParam extends Filterable {
 

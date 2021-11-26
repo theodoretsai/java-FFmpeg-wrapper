@@ -12,8 +12,9 @@ import java.util.List;
 
 /**
  * @author theodore.tsai
- * @descrption 复杂过滤器封装
- * 增加过滤器后用generateComplexFilter生成命令
+ * @descrption Cmplex Filter Class
+ * Generates the complex filter string to be added to the command arguments.
+ * end result: -filter_complex "[filter_string]"
  * @date 20/09/2021
  */
 public class ComplexFilter {

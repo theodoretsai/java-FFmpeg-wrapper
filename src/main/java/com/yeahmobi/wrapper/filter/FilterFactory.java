@@ -11,9 +11,8 @@ import com.yeahmobi.wrapper.filter.visual.*;
 import java.util.List;
 
 /**
- * 过滤器factory，
- * 过滤器用此类生成
- * 建议不要直接使用过滤器constructor
+ * Filter factory，
+ * handles generating filters and parameters
  *
  * @author theodore.tsai
  */

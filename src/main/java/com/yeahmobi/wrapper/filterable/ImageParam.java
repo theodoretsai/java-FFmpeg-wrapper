@@ -3,7 +3,12 @@ package com.yeahmobi.wrapper.filterable;
 import com.yeahmobi.wrapper.FFmpegCommand;
 import lombok.*;
 
-
+/**
+ * An image Stream (e.g. image1.jpg)
+ * There is no actual distinction in FFmpeg between image and videos,
+ * but there are video filters that don't apply to images.
+ * @Author: theodore.tsai
+ */
 @Getter
 @Setter
 public class ImageParam extends VisualParam {

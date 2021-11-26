@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * FFmpeg command
+ */
 @Getter
 @Setter
 public class   FFmpegCommand{
@@ -35,6 +38,10 @@ public class   FFmpegCommand{
 
     private int generatorCounter;
 
+    /**
+     * runs the command in the command line
+     * @return the output of the stdout
+     */
     public String run(){
         DefaultExecutor executor = new DefaultExecutor();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -49,6 +56,10 @@ public class   FFmpegCommand{
         return outputStream.toString();
     }
 
+    /**
+     * generates the command line (Apache commons exec) Object
+     * @return apache.commons.exec.CommandLine the command line object
+     */
     private CommandLine generate(){
         CommandLine command = new CommandLine("ffmpeg");
         for(String input: (this.inputs.stream().map(i -> i.getPath()).collect(java.util.stream.Collectors.toList()))){
@@ -65,7 +76,14 @@ public class   FFmpegCommand{
         return command;
     }
 
+    /**
+     * Constructor method, maps all the streams from inputs into filterable objects
+     * @param inputs list of paths of input files
+     * @param output the output directory
+     */
     //TODO: this part is ugly but works for now
+    //TODO: remake the probe to avoid injecting >net.bramp.ffmpeg package
+    // (It's a great project and it works fine but I'd like it this one to be standalone, so if the user also needs bramp's ffmpeg package he can just inject both)
     public FFmpegCommand(List<String> inputs, String output){
         int counter = 0;
         this.inputs = new ArrayList<>();
@@ -115,7 +133,7 @@ public class   FFmpegCommand{
         this.outputStreams = new ArrayList<>();
     }
 
-    //TODO: think of a way to avoid casts
+    //TODO: Definitely the uglies part of the whole thing but I can't think of a way to avoid casts
     public VideoParam selectVideoChannelFromInput(String url) {
         for(FFmpegInput input: this.inputs){
             if(input.getPath().equals(url)){
@@ -149,6 +167,9 @@ public class   FFmpegCommand{
         throw  new IllegalArgumentException("No such input");
     }
 
+    /**
+    * returns the ffmpeg command as a string, useful for server logging
+    */
     public  String getLoggerMessage() {
         StringBuilder message = new StringBuilder();
         message.append("FFmpeg ");

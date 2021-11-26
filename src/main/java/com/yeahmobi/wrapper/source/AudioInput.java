@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class AudioInput extends FFmpegInput{
+
     private List<AudioParam> audioStreams;
 
     public AudioInput(String path, List<AudioParam> audioStreams) {

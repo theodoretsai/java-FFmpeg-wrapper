@@ -8,9 +8,10 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 /**
- * 链接视频过滤器
+ * Concat Filter
  * <p>
- * 展时之支持单音源视频
+ * Only supports single video stream and audio stream
+ * TODO: rename to simple concat Filter and add a new concat Filter to support multiple streams
  *
  * @author theodore.tsai
  * @date 21/09/2021
