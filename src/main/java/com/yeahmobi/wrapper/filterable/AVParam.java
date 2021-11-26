@@ -12,7 +12,7 @@ import lombok.Getter;
 @Getter
 public class AVParam {
 
-    private FFmpegCommand command;
+    private final FFmpegCommand command;
     private VideoParam videoParam;
     private AudioParam audioParam;
 

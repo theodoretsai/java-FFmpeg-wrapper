@@ -22,9 +22,9 @@ public class ScaleFilter implements Filter {
         command.append(this.params.getWidth());
         command.append(":");
         command.append(this.params.getHeight());
-        if (params.getForceAspectRatio()) {
+        if (Boolean.TRUE.equals(params.getForceAspectRatio())) {
             command.append(":force_original_aspect_ratio=");
-            if (params.getIsIncrease()) {
+            if (Boolean.TRUE.equals(params.getIsIncrease())) {
                 command.append("increase");
             } else {
                 command.append("decrease");

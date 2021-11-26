@@ -16,7 +16,9 @@ public class CropFilter implements Filter {
     public String generateFilter() {
         StringBuilder command = new StringBuilder();
         command.append(this.inputs.enclose());
-        command.append("crop=" + this.params.getWidth() + ":" + this.params.getHeight());
+        command.append("crop=")
+                .append(this.params.getWidth())
+                .append(":").append(this.params.getHeight());
         if (this.output != null) {
             command.append(output.enclose());
         }

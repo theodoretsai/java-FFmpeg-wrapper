@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 public class VideoParam extends VisualParam {
 
-    private String argument;
+    private final String argument;
 
 
     @Override
@@ -23,7 +23,7 @@ public class VideoParam extends VisualParam {
 
     @Override
     public VideoParam scale(Integer width, Integer height, Boolean forceAspectRatio, Boolean isIncrease){
-        VideoParam result = this.command.getVideoParam();;
+        VideoParam result = this.command.getVideoParam();
         this.getCommand().getComplexFilter().addScaleFilter(
                 this,
                 result,
@@ -37,7 +37,7 @@ public class VideoParam extends VisualParam {
 
     @Override
     public VideoParam pad(Integer width, Integer height, Integer horizontalOffset, Integer verticalOffset){
-        VideoParam result = this.command.getVideoParam();;
+        VideoParam result = this.command.getVideoParam();
         this.getCommand().getComplexFilter().addPadFilter(
                 this,
                 result,
@@ -79,7 +79,7 @@ public class VideoParam extends VisualParam {
     @Override
     public VideoParam dar(String dar){
 
-        VideoParam result = this.command.getVideoParam();;
+        VideoParam result = this.command.getVideoParam();
         this.getCommand().getComplexFilter().addDarFilter(
                 this,
                 result,
@@ -90,7 +90,7 @@ public class VideoParam extends VisualParam {
 
     @Override
     public VideoParam crop(Integer width, Integer height){
-        VideoParam result = this.command.getVideoParam();;
+        VideoParam result = this.command.getVideoParam();
         this.getCommand().getComplexFilter().addCropFilter(
                 this,
                 result,
@@ -126,9 +126,6 @@ public class VideoParam extends VisualParam {
 
     @Override
     public boolean isSource(){
-        if (this.argument.matches("0.*|1.*|2.*|3.*|4.*|5.*|6.*|7.*|8.*|9.*")){
-            return true;
-        }
-        return false;
+        return this.argument.matches("0.*|1.*|2.*|3.*|4.*|5.*|6.*|7.*|8.*|9.*");
     }
 }

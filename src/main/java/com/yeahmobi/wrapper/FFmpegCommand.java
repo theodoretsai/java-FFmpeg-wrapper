@@ -92,7 +92,7 @@ public class   FFmpegCommand{
                 FFprobe ffprobe = new FFprobe();
                 FFmpegProbeResult result = ffprobe.probe(input);
                 if (!Files.probeContentType(Paths.get(input)).matches("image/.*")
-                        && result.getStreams().stream().anyMatch(s -> Optional.ofNullable(s.codec_type).equals(Optional.ofNullable(FFmpegStream.CodecType.VIDEO)))
+                        && result.getStreams().stream().anyMatch(s -> Optional.ofNullable(s.codec_type).equals(Optional.of(FFmpegStream.CodecType.VIDEO)))
                 ) {
                     List<VideoParam> videoList = new ArrayList<>();
                     List<AudioParam> audioList = new ArrayList<>();
@@ -109,7 +109,7 @@ public class   FFmpegCommand{
                     }
                     this.inputs.add(new VideoInput(input, videoList, audioList));
                     counter++;
-                } else if(result.getStreams().stream().anyMatch(s -> Optional.ofNullable(s.codec_type).equals(Optional.ofNullable(FFmpegStream.CodecType.AUDIO)))){
+                } else if(result.getStreams().stream().anyMatch(s -> Optional.ofNullable(s.codec_type).equals(Optional.of(FFmpegStream.CodecType.AUDIO)))){
                     List<AudioParam> audioList = new ArrayList<>();
                     int audioStreamCounter = 0;
                     for(FFmpegStream stream :result.getStreams()){
