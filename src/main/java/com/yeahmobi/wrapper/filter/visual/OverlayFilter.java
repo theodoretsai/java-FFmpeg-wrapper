@@ -36,21 +36,19 @@ public class OverlayFilter implements Filter {
         }else{
             command.append(overlay.enclose());
         }
-        command.append("overlay=").append(params.getHorizontalOffset()).append(":").append(params.getVerticalOffset());
+        command.append("overlay=" + params.getHorizontalOffset() + ":" + params.getVerticalOffset());
         if(Objects.nonNull(timeLineParam)){
             command.append(":enable=");
-            if(timeLineParam.getType().equals(TimeLineParam.BETWEEN)){
-                command.append("'between(t,");
-                command.append(timeLineParam.getStart());
-                command.append(",");
-                command.append(timeLineParam.getEnd());
-                command.append(")'");
-            }else if(timeLineParam.getType().equals(TimeLineParam.GREATER_THAN)){
+            if(timeLineParam.getType() == TimeLineParam.BETWEEN){
+                command.append("\'between(t,")
+                        .append(timeLineParam.getStart()+",")
+                        .append(timeLineParam.getEnd()+")'");
+            }else if(timeLineParam.getType() == TimeLineParam.GREATER_THAN){
                 command.append("'gt(t,")
-                        .append(MessageFormat.format("{0})''", timeLineParam.getStart()));
-            }else if(timeLineParam.getType().equals(TimeLineParam.LESS_THAN)) {
+                        .append(timeLineParam.getStart()+")'");
+            }else if(timeLineParam.getType() == TimeLineParam.LESS_THAN) {
                 command.append("'lt(t,")
-                        .append(MessageFormat.format("{0})''", timeLineParam.getEnd()));
+                        .append(timeLineParam.getEnd() + ")'");
             }
         }
         if (output != null) {
@@ -59,3 +57,4 @@ public class OverlayFilter implements Filter {
         return command.toString();
     }
 }
+

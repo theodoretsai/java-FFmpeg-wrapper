@@ -37,11 +37,9 @@ public class ComplexFilter {
     public String generateComplexFilter() {
 
         StringBuilder command = new StringBuilder();
-        command.append("\"");
         for (Filter Filter : filters) {
             command.append(Filter.generateFilter());
         }
-        command.append("\"");
         return command.toString();
     }
 

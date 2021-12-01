@@ -15,6 +15,7 @@ public class AFadeParam {
 
     private float duration;
 
+    //TODO curve not implemented, uses triangular by default
     private String curve;
 
 }

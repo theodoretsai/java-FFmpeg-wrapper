@@ -20,30 +20,25 @@ public class InputSource {
 
 
     public VideoParam getVideo(FFmpegCommand command){
-        return new VideoParam(command, enclose(this.index+":v"));
+        return new VideoParam(command, this.index+":v");
     }
 
     public ImageParam getImage(FFmpegCommand command){
-        return new ImageParam(command, enclose(this.index));
+        return new ImageParam(command, String.valueOf(this.index));
     }
 
     public AudioParam getAudio(FFmpegCommand command){
-        return new AudioParam(command, enclose(this.index+":a"));
+        return new AudioParam(command, this.index+":a");
     }
 
     public VideoParam getVideo(FFmpegCommand command, int channel){
-        return new VideoParam(command, enclose(this.index+":"+channel));
+        return new VideoParam(command, this.index+":v:"+channel);
     }
 
     public AudioParam getAudio(FFmpegCommand command, int channel){
-        return new AudioParam(command, enclose(this.index+":"+channel));
+        return new AudioParam(command, this.index+":a:"+channel);
     }
 
-    private String enclose(int arg){
-        return enclose(String.valueOf(arg));
-    }
-    private String enclose(String str){
-        return "[" + str + "]";
-    }
+
 
 }

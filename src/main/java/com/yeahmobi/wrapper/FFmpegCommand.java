@@ -31,6 +31,7 @@ public class   FFmpegCommand{
     private List<Filterable> outputStreams;
     private String output;
     private int vSync = 2;
+    private boolean doOverwrite = true;
 
     private int generatorCounter;
 
@@ -40,16 +41,16 @@ public class   FFmpegCommand{
      */
     public String run() throws IOException {
         DefaultExecutor executor = new DefaultExecutor();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream, outputStream);
-        executor.setStreamHandler(streamHandler);
+        //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        //PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream, outputStream);
+        //executor.setStreamHandler(streamHandler);
         try {
             CommandLine command = generate();
             executor.execute(command);
         }catch (Exception e) {
             throw new IOException(e);
         }
-        return outputStream.toString();
+        return "hello".toString();
     }
 
     /**
@@ -62,8 +63,13 @@ public class   FFmpegCommand{
             command.addArgument("-i");
             command.addArgument(input);
         }
+        if(this.doOverwrite){
+            command.addArgument("-y");
+        }
         command.addArgument("-filter_complex");
-        command.addArgument(this.complexFilter.generateComplexFilter());
+        command.addArgument(this.complexFilter.generateComplexFilter(),false);
+        command.addArgument("-vsync");
+        command.addArgument(String.valueOf(this.vSync));
         for(Filterable stream: this.outputStreams) {
             command.addArgument("-map");
             command.addArgument(stream.getMappable());
@@ -82,6 +88,7 @@ public class   FFmpegCommand{
         this.inputs = new ArrayList<>();
         for(String input: inputs){
             this.inputs.add(new InputSource(input,counter));
+            counter++;
         }
         this.output = output;
         this.complexFilter = new ComplexFilter();
@@ -91,7 +98,7 @@ public class   FFmpegCommand{
     public VideoParam selectVideoChannelFromInput(String url) {
         for(InputSource input: this.inputs){
             if(input.getPath().equals(url)){
-                return input.getVideo(this);
+                return input.getVideo(this,0);
             }
         }
         throw new IllegalArgumentException("No such input");
@@ -109,7 +116,7 @@ public class   FFmpegCommand{
     public AudioParam selectAudioChannelFromVideoInput(String url) {
         for(InputSource input: this.inputs){
             if(input.getPath().equals(url)){
-                return input.getAudio(this);
+                return input.getAudio(this,0);
             }
         }
         throw new IllegalArgumentException("No such input");
