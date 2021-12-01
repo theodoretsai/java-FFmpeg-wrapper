@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public abstract class Filterable {
 
+    //TODO remove this circular reference maybe
     FFmpegCommand command;
 
     /**
