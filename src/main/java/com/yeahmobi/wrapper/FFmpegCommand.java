@@ -41,16 +41,16 @@ public class   FFmpegCommand{
      */
     public String run() throws IOException {
         DefaultExecutor executor = new DefaultExecutor();
-        //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        //PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream, outputStream);
-        //executor.setStreamHandler(streamHandler);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream, outputStream);
+        executor.setStreamHandler(streamHandler);
         try {
             CommandLine command = generate();
             executor.execute(command);
         }catch (Exception e) {
             throw new IOException(e);
         }
-        return "hello".toString();
+        return outputStream.toString();
     }
 
     /**
@@ -113,7 +113,7 @@ public class   FFmpegCommand{
         throw new IllegalArgumentException("No such input");
     }
 
-    public AudioParam selectAudioChannelFromVideoInput(String url) {
+    public AudioParam selectAudioChannelFromInput(String url) {
         for(InputSource input: this.inputs){
             if(input.getPath().equals(url)){
                 return input.getAudio(this,0);
@@ -122,7 +122,7 @@ public class   FFmpegCommand{
         throw new IllegalArgumentException("No such input");
     }
 
-    public AudioParam selectAudioChannelFromVideoInput(String url, int channel) {
+    public AudioParam selectAudioChannelFromInput(String url, int channel) {
         for(InputSource input: this.inputs){
             if(input.getPath().equals(url)){
                 return input.getAudio(this,channel);

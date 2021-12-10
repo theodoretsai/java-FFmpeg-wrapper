@@ -1,5 +1,4 @@
 import com.yeahmobi.wrapper.FFmpegCommand;
-import com.yeahmobi.wrapper.filterable.AVParam;
 import com.yeahmobi.wrapper.filterable.AudioParam;
 import com.yeahmobi.wrapper.filterable.ImageParam;
 import com.yeahmobi.wrapper.filterable.VideoParam;
@@ -12,8 +11,6 @@ import testModel.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MergingTest {
 
@@ -31,11 +28,11 @@ public class MergingTest {
         FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
 
         VideoParam main = command.selectVideoChannelFromInput("C:/demo/irregular.mp4");
-        AudioParam mainAudio = command.selectAudioChannelFromVideoInput("C:/demo/irregular.mp4");
+        AudioParam mainAudio = command.selectAudioChannelFromInput("C:/demo/irregular.mp4");
         ImageParam logo = command.selectImageFromInput("C:/demo/logo2.png");
         ImageParam frame = command.selectImageFromInput("C:/demo/frame.png");
         VideoParam intro = command.selectVideoChannelFromInput("C:/demo/outro.mov");
-        AudioParam introAudio = command.selectAudioChannelFromVideoInput("C:/demo/outro.mp4");
+        AudioParam introAudio = command.selectAudioChannelFromInput("C:/demo/outro.mp4");
         VideoParam outro = command.selectVideoChannelFromInput("C:/demo/800x1000.mov");
 
         main = main.scale(1080,610,true,true)

@@ -9,7 +9,6 @@ import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.probe.FFmpegFormat;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
 import org.apache.commons.lang3.ObjectUtils;
-import org.modelmapper.internal.cglib.core.CollectionUtils;
 
 
 import java.io.IOException;
@@ -26,7 +25,7 @@ public class FFmpegMergingService {
             FFmpegCommand command = new FFmpegCommand(Stream.of(inputUrl, videoTemplate.getUrl()).collect(Collectors.toList()), outputUrl);
             VideoParam sized = sizeToVideoBox(command.selectVideoChannelFromInput(inputUrl), videoTemplate);
             padToTemplate(sized, videoTemplate).overlay(command.selectImageFromInput(videoTemplate.getUrl()), 0, 0).mapToOutput();
-            command.selectAudioChannelFromVideoInput(inputUrl).mapToOutput();
+            command.selectAudioChannelFromInput(inputUrl).mapToOutput();
             System.out.println("Execute command: "+ command.getLoggerMessage());
             return command.run();
         } catch (Exception e) {
@@ -47,7 +46,7 @@ public class FFmpegMergingService {
             VideoParam main = padToTemplate(sized, videoTemplate).overlay(command.selectImageFromInput(videoTemplate.getUrl()), 0, 0);
             main = applyLogo(main, videoTemplate, logoList);
             main.mapToOutput();
-            command.selectAudioChannelFromVideoInput(inputUrl).mapToOutput();
+            command.selectAudioChannelFromInput(inputUrl).mapToOutput();
             System.out.println("Execute command: "+ command.getLoggerMessage());
             return command.run();
         } catch (Exception e) {
@@ -70,7 +69,7 @@ public class FFmpegMergingService {
             }
             FFmpegCommand command = new FFmpegCommand(inputList, outputUrl);
             VideoParam main = sizeToVideoBox(command.selectVideoChannelFromInput(inputUrl), videoTemplate);
-            AudioParam mainAudio = command.selectAudioChannelFromVideoInput(inputUrl);
+            AudioParam mainAudio = command.selectAudioChannelFromInput(inputUrl);
             //处理嵌入首尾片段
             AVParam mainAV = applyInFrameFragments(command, intro, outro, videoTemplate, inputUrl, main, mainAudio);
             main = mainAV.getVideoParam();
@@ -110,7 +109,7 @@ public class FFmpegMergingService {
             logoList.stream().forEach(i -> inputList.add(i.getUrl()));
             FFmpegCommand command = new FFmpegCommand(inputList, outputUrl);
             VideoParam main = sizeToVideoBox(command.selectVideoChannelFromInput(inputUrl), videoTemplate);
-            AudioParam mainAudio = command.selectAudioChannelFromVideoInput(inputUrl);
+            AudioParam mainAudio = command.selectAudioChannelFromInput(inputUrl);
             main = applyLogo(main, videoTemplate, logoList);
             //处理嵌入首尾片段
             AVParam mainAV = applyInFrameFragments(command, intro, outro, videoTemplate, inputUrl, main, mainAudio);
@@ -152,7 +151,7 @@ public class FFmpegMergingService {
                 VideoParam sizedIntro = sizeToVideoBox(command.selectVideoChannelFromInput(intro.getUrl()), videoTemplate);
                 if (intro.getConcatStyle() == FragmentStyleEnum.CONCAT.getCode()) {
                     concatList.add(sizedIntro);
-                    audioList.add(command.selectAudioChannelFromVideoInput(intro.getUrl()));
+                    audioList.add(command.selectAudioChannelFromInput(intro.getUrl()));
                 }
                 if (intro.getConcatStyle() == FragmentStyleEnum.OVERLAY.getCode()) {
                     Float introDuration = getDurationInSeconds(intro.getUrl());
@@ -167,7 +166,7 @@ public class FFmpegMergingService {
                     audioList.add(mainAudio);
 
                     concatList.add(sizedOutro);
-                    audioList.add(command.selectAudioChannelFromVideoInput(outro.getUrl()));
+                    audioList.add(command.selectAudioChannelFromInput(outro.getUrl()));
                 }
                 if (outro.getConcatStyle() == FragmentStyleEnum.OVERLAY.getCode()) {
 
@@ -203,7 +202,7 @@ public class FFmpegMergingService {
                 VideoParam scaledIntro = sizeToTemplate(command.selectVideoChannelFromInput(intro.getUrl()), videoTemplate);
                 if (intro.getConcatStyle() == FragmentStyleEnum.CONCAT.getCode()) {
                     concatList.add(scaledIntro);
-                    audioList.add(command.selectAudioChannelFromVideoInput(intro.getUrl()));
+                    audioList.add(command.selectAudioChannelFromInput(intro.getUrl()));
                 } else if (intro.getConcatStyle() == FragmentStyleEnum.OVERLAY.getCode()) {
 
                     Float introDuration = getDurationInSeconds(intro.getUrl());
@@ -218,7 +217,7 @@ public class FFmpegMergingService {
                     concatList.add(main);
                     audioList.add(mainAudio);
                     concatList.add(scaledOutro);
-                    audioList.add(command.selectAudioChannelFromVideoInput(outro.getUrl()));
+                    audioList.add(command.selectAudioChannelFromInput(outro.getUrl()));
                 } else if (outro.getConcatStyle() == FragmentStyleEnum.OVERLAY.getCode()) {
 
                     float duration = getDurationInSeconds(inputUrl);
