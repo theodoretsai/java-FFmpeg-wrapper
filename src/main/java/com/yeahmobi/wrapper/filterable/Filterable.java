@@ -2,6 +2,8 @@ package com.yeahmobi.wrapper.filterable;
 
 
 import com.yeahmobi.wrapper.FFmpegCommand;
+import com.yeahmobi.wrapper.filter.SplitFilter;
+import com.yeahmobi.wrapper.filter.custom.CustomFilter;
 import lombok.Data;
 
 /**
@@ -48,5 +50,9 @@ public abstract class Filterable {
      * @return true if the stream comes from a source, false if it is a filter result
      */
     public abstract boolean isSource();
+
+    public abstract SplitResult split();
+
+    public abstract CustomFilter filter(String FilterName);
 
 }

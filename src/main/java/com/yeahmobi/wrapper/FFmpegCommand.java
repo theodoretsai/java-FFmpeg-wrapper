@@ -41,16 +41,17 @@ public class   FFmpegCommand{
      */
     public String run() throws IOException {
         DefaultExecutor executor = new DefaultExecutor();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream, outputStream);
-        executor.setStreamHandler(streamHandler);
+        //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        //PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream, outputStream);
+        //executor.setStreamHandler(streamHandler);
         try {
             CommandLine command = generate();
             executor.execute(command);
         }catch (Exception e) {
             throw new IOException(e);
         }
-        return outputStream.toString();
+        return null;
+        //return outputStream.toString();
     }
 
     /**

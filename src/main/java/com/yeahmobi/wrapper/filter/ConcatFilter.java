@@ -6,6 +6,7 @@ import com.yeahmobi.wrapper.filterable.VideoParam;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Concat Filter
@@ -35,13 +36,15 @@ public class ConcatFilter implements Filter {
         int i;
         for(i=0;i<this.videoInputs.size();i++){
             command.append(this.videoInputs.get(i).enclose());
-            command.append(this.audioInputs.get(i).enclose());
+            if(Objects.nonNull(this.audioInputs) && !this.audioInputs.isEmpty()) {
+                command.append(this.audioInputs.get(i).enclose());
+            }
         }
         command.append("concat=n=");
         command.append(this.videoInputs.size());
-        command.append(":v=1:a=1");
+        command.append(":v=1:a=0");
         command.append(output.getVideoParam().enclose());
-        command.append(output.getAudioParam().enclose());
+        //command.append(output.getAudioParam().enclose());
 
         return command.toString();
     }

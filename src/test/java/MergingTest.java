@@ -1,7 +1,6 @@
 import com.yeahmobi.wrapper.FFmpegCommand;
-import com.yeahmobi.wrapper.filterable.AudioParam;
-import com.yeahmobi.wrapper.filterable.ImageParam;
-import com.yeahmobi.wrapper.filterable.VideoParam;
+import com.yeahmobi.wrapper.filter.SplitFilter;
+import com.yeahmobi.wrapper.filterable.*;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.probe.FFmpegFormat;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
@@ -13,6 +12,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MergingTest {
+
+
+    @Test
+    public void splitFilterTest() throws IOException{
+        List<String> inputList= new ArrayList<>();
+        inputList.add("C:/demo/irregular.mp4");
+        inputList.add("C:/demo/outro.mov");
+        FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
+
+
+        VideoParam main = command.selectVideoChannelFromInput("C:/demo/irregular.mp4");
+        main = main.scale(1920,1080,true,true).crop(1920,1080);
+        main = main.dar("16/9");
+        VideoParam main2 = command.getInputs().get(1).getVideo(command,0);
+        main2 = main2.scale(1920,1080,true,true).crop(1920,1080);
+        main2 = main2.dar("16/9");
+
+        SplitResult split = main2.split();
+        VideoParam split1 = split.getFirstCopy();
+        VideoParam split2 = split.getSecondCopy();
+        List<VideoParam> concatList = new ArrayList<>();
+
+        concatList.add(split1);
+        concatList.add(main);
+        concatList.add(split2);
+        AVParam av = VideoParam.concat(concatList,null);
+        av.getVideoParam().mapToOutput();
+        System.out.println(command.getLoggerMessage());
+        System.out.println(command.run());
+    }
+
+    @Test
+    public void customFilterTest() throws Exception{
+        List<String> inputList= new ArrayList<>();
+        inputList.add("C:/demo/irregular.mp4");
+        inputList.add("C:/demo/outro.mov");
+        inputList.add("C:/demo/frame.png");
+        inputList.add("C:/demo/logo2.png");
+        inputList.add("C:/demo/outro.mp4");
+        inputList.add("C:/demo/800x1000.mov");
+
+        FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
+
+        VideoParam main = command.selectVideoChannelFromInput("C:/demo/irregular.mp4");
+        main = main.filter("crop").addParam("w","1080").addParam("h","610").build();
+        System.out.println(main.getClass());
+        System.out.println(main.getCommand().getLoggerMessage());
+    }
 
 
     @Test void commandTest() throws IOException{
@@ -100,7 +147,5 @@ public class MergingTest {
 
     @Test
     public void srtTest(){
-
-
     }
 }

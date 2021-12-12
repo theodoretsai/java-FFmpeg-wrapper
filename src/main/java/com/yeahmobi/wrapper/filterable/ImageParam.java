@@ -1,7 +1,11 @@
 package com.yeahmobi.wrapper.filterable;
 
 import com.yeahmobi.wrapper.FFmpegCommand;
+import com.yeahmobi.wrapper.filter.SplitFilter;
+import com.yeahmobi.wrapper.filter.custom.CustomFilter;
 import lombok.*;
+
+import java.util.ArrayList;
 
 /**
  * An image Stream (e.g. image1.jpg)
@@ -85,6 +89,21 @@ public class ImageParam extends VisualParam {
         return result;
     }
 
+    @Override
+    public CustomFilter filter(String filterName) {
+        AudioParam result = this.command.getAudioParam();
+        CustomFilter filter = new CustomFilter(this,result,filterName,new ArrayList<>());
+        this.getCommand().getComplexFilter().addFilter(filter);
+        return filter;
+    }
+
+    public SplitResult split(){
+        ImageParam original = this.command.getImageParam();
+        ImageParam copy = this.command.getImageParam();
+        SplitFilter filter = new SplitFilter(this, original,copy);
+        this.command.getComplexFilter().addFilter(filter);
+        return new SplitResult(original,copy);
+    }
     public ImageParam(FFmpegCommand command, String argument) {
         super(command);
         this.argument = argument;
@@ -102,7 +121,5 @@ public class ImageParam extends VisualParam {
         return this.argument.matches("0.*|1.*|2.*|3.*|4.*|5.*|6.*|7.*|8.*|9.*");
     }
 
-    public VideoParam extractVideoTrack(){
-        throw new UnsupportedOperationException("Cannot extract video from image");
-    }
+
 }

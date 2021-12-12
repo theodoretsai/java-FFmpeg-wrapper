@@ -1,10 +1,9 @@
 package com.yeahmobi.wrapper.filter;
 
-import com.yeahmobi.wrapper.filterable.AVParam;
-import com.yeahmobi.wrapper.filterable.AudioParam;
-import com.yeahmobi.wrapper.filterable.VideoParam;
-import com.yeahmobi.wrapper.filterable.VisualParam;
+import com.yeahmobi.wrapper.filter.custom.CustomFilter;
+import com.yeahmobi.wrapper.filterable.*;
 import com.yeahmobi.wrapper.filter.visual.FilterChain;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.List;
  * end result: -filter_complex "[filter_string]"
  * @date 20/09/2021
  */
+@Getter
 public class ComplexFilter {
 
     private final List<Filter> filters;
@@ -49,7 +49,7 @@ public class ComplexFilter {
      * @param Filter 过滤器
      * @return this, 支持连续添加
      */
-    private ComplexFilter addFilter(Filter Filter) {
+    public ComplexFilter addFilter(Filter Filter) {
         if (!this.filters.isEmpty()) {
             this.filters.add(new FilterChain(false));
         }
@@ -104,4 +104,7 @@ public class ComplexFilter {
         return this.addFilter(FilterFactory.buildAfadeFilter(input, output, start, duration, isIn));
     }
 
+    public ComplexFilter addCustomFilter(Filterable input, Filterable output, String filterName) {
+        return this.addFilter(new CustomFilter(input, output, filterName, new ArrayList<>()));
+    }
 }

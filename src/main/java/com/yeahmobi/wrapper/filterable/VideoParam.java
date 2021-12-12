@@ -1,8 +1,12 @@
 package com.yeahmobi.wrapper.filterable;
 import com.yeahmobi.wrapper.FFmpegCommand;
 
+import com.yeahmobi.wrapper.filter.SplitFilter;
+import com.yeahmobi.wrapper.filter.custom.CustomFilter;
 import lombok.Getter;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,9 +15,10 @@ import java.util.List;
  */
 
 @Getter
+@Setter
 public class VideoParam extends VisualParam {
 
-    private final String argument;
+    private String argument;
 
 
     @Override
@@ -99,6 +104,12 @@ public class VideoParam extends VisualParam {
         );
         return result;
     }
+    public CustomFilter filter(String filterName){
+        VideoParam result = this.command.getVideoParam();
+        CustomFilter filter = new CustomFilter(this,result,filterName,new ArrayList<>());
+        this.getCommand().getComplexFilter().addFilter(filter);
+        return filter;
+    }
 
     public static AVParam concat(List<VideoParam> videoParams, List<AudioParam> audioParams){
         AVParam result = videoParams.get(0).getCommand().getAVParam();
@@ -109,6 +120,16 @@ public class VideoParam extends VisualParam {
         );
         return result;
     }
+
+    public SplitResult split(){
+        VideoParam original = this.command.getVideoParam();
+        VideoParam copy = this.command.getVideoParam();
+        SplitFilter filter = new SplitFilter(this, original,copy);
+        this.command.getComplexFilter().addFilter(filter);
+        return new SplitResult(original,copy);
+    }
+
+
 
     public VideoParam(FFmpegCommand command,String argument) {
         super(command);
