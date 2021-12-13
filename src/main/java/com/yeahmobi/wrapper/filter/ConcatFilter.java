@@ -1,6 +1,6 @@
 package com.yeahmobi.wrapper.filter;
 
-import com.yeahmobi.wrapper.filterable.AVParam;
+import com.yeahmobi.wrapper.filterable.results.AVParam;
 import com.yeahmobi.wrapper.filterable.AudioParam;
 import com.yeahmobi.wrapper.filterable.VideoParam;
 import lombok.AllArgsConstructor;
@@ -44,7 +44,7 @@ public class ConcatFilter implements Filter {
         command.append(this.videoInputs.size());
         command.append(":v=1:a=0");
         command.append(output.getVideoParam().enclose());
-        //command.append(output.getAudioParam().enclose());
+        command.append(output.getAudioParam().enclose());
 
         return command.toString();
     }

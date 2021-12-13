@@ -3,6 +3,7 @@ package com.yeahmobi.wrapper.filter;
 import com.yeahmobi.wrapper.filter.custom.CustomFilter;
 import com.yeahmobi.wrapper.filterable.*;
 import com.yeahmobi.wrapper.filter.visual.FilterChain;
+import com.yeahmobi.wrapper.filterable.results.AVParam;
 import lombok.Getter;
 
 import java.util.ArrayList;

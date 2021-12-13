@@ -1,6 +1,8 @@
-package com.yeahmobi.wrapper.filterable;
+package com.yeahmobi.wrapper.filterable.results;
 
 import com.yeahmobi.wrapper.FFmpegCommand;
+import com.yeahmobi.wrapper.filterable.AudioParam;
+import com.yeahmobi.wrapper.filterable.VideoParam;
 import lombok.Getter;
 
 /**

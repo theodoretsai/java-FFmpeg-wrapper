@@ -1,23 +1,16 @@
 package com.yeahmobi.wrapper;
 
 import com.yeahmobi.wrapper.filter.ComplexFilter;
+import com.yeahmobi.wrapper.filterable.results.AVParam;
 import com.yeahmobi.wrapper.source.InputSource;
 import com.yeahmobi.wrapper.filterable.*;
 import lombok.Getter;
 import lombok.Setter;
-import net.bramp.ffmpeg.FFprobe;
-import net.bramp.ffmpeg.probe.FFmpegProbeResult;
-import net.bramp.ffmpeg.probe.FFmpegStream;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.PumpStreamHandler;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * FFmpeg command

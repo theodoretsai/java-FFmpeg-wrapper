@@ -1,7 +1,7 @@
 package testModel;
 
 import com.yeahmobi.wrapper.*;
-import com.yeahmobi.wrapper.filterable.AVParam;
+import com.yeahmobi.wrapper.filterable.results.AVParam;
 import com.yeahmobi.wrapper.filterable.AudioParam;
 import com.yeahmobi.wrapper.filterable.ImageParam;
 import com.yeahmobi.wrapper.filterable.VideoParam;

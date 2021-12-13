@@ -1,6 +1,7 @@
 import com.yeahmobi.wrapper.FFmpegCommand;
-import com.yeahmobi.wrapper.filter.SplitFilter;
 import com.yeahmobi.wrapper.filterable.*;
+import com.yeahmobi.wrapper.filterable.results.AVParam;
+import com.yeahmobi.wrapper.filterable.results.SplitResult;
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.probe.FFmpegFormat;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
@@ -21,7 +22,6 @@ public class MergingTest {
         inputList.add("C:/demo/outro.mov");
         FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
 
-
         VideoParam main = command.selectVideoChannelFromInput("C:/demo/irregular.mp4");
         main = main.scale(1920,1080,true,true).crop(1920,1080);
         main = main.dar("16/9");
@@ -38,7 +38,8 @@ public class MergingTest {
         concatList.add(main);
         concatList.add(split2);
         AVParam av = VideoParam.concat(concatList,null);
-        av.getVideoParam().mapToOutput();
+        av.getVideoParam().defaultMap();
+        av.getAudioParam().defaultMap();
         System.out.println(command.getLoggerMessage());
         System.out.println(command.run());
     }
@@ -59,6 +60,7 @@ public class MergingTest {
         main = main.filter("crop").addParam("w","1080").addParam("h","610").build();
         System.out.println(main.getClass());
         System.out.println(main.getCommand().getLoggerMessage());
+
     }
 
 
@@ -127,7 +129,8 @@ public class MergingTest {
                 1920,
                 1080,
                 610,
-                0,                0
+                0,
+                0
         );
         List<LogoTemplate> logoList = new ArrayList<>();
         logoList.add

@@ -3,6 +3,7 @@ package com.yeahmobi.wrapper.filterable;
 import com.yeahmobi.wrapper.FFmpegCommand;
 import com.yeahmobi.wrapper.filter.SplitFilter;
 import com.yeahmobi.wrapper.filter.custom.CustomFilter;
+import com.yeahmobi.wrapper.filterable.results.SplitResult;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -16,14 +17,6 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class ImageParam extends VisualParam {
-
-    private String argument;
-
-    @Override
-    public String enclose() {
-        return "["+this.argument+"]";
-    }
-
 
     @Override
     public ImageParam scale(Integer width, Integer height, Boolean forceAspectRatio, Boolean isIncrease){
@@ -104,22 +97,22 @@ public class ImageParam extends VisualParam {
         this.command.getComplexFilter().addFilter(filter);
         return new SplitResult(original,copy);
     }
+
     public ImageParam(FFmpegCommand command, String argument) {
-        super(command);
-        this.argument = argument;
+        super(command, argument);
     }
 
     public String getMappable() {
         if(this.isSource()){
-            return this.argument;
+            return this.getArgument();
         }else{
             return this.enclose();
         }
     }
 
-    public boolean isSource(){
-        return this.argument.matches("0.*|1.*|2.*|3.*|4.*|5.*|6.*|7.*|8.*|9.*");
-    }
 
+    public boolean isSource(){
+        return this.getArgument().matches("0.*|1.*|2.*|3.*|4.*|5.*|6.*|7.*|8.*|9.*");
+    }
 
 }

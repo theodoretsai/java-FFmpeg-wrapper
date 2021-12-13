@@ -2,8 +2,9 @@ package com.yeahmobi.wrapper.filterable;
 
 
 import com.yeahmobi.wrapper.FFmpegCommand;
-import com.yeahmobi.wrapper.filter.SplitFilter;
 import com.yeahmobi.wrapper.filter.custom.CustomFilter;
+import com.yeahmobi.wrapper.filterable.results.SplitResult;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -12,16 +13,30 @@ import lombok.Data;
  * Video, Auidio or Image
  */
 @Data
+@AllArgsConstructor
 public abstract class Filterable {
 
     //TODO remove this circular reference maybe
     FFmpegCommand command;
 
+    private String argument;
+
+    Boolean defaultMap = false;
+
     /**
      * Return the name of the stream in square brackets [name]
      * @return
      */
-    public abstract String enclose();
+    public String enclose(){
+        if(!this.defaultMap){
+            return "[" + this.argument + "]";
+        }
+        return "";
+    }
+
+    public void defaultMap(){
+        this.defaultMap = true;
+    }
 
     /**
      * constructor with command
@@ -30,7 +45,6 @@ public abstract class Filterable {
     protected Filterable(FFmpegCommand command) {
         this.command = command;
     }
-
 
     public FFmpegCommand mapToOutput(){
         this.command.getOutputStreams().add(this);
@@ -55,4 +69,8 @@ public abstract class Filterable {
 
     public abstract CustomFilter filter(String FilterName);
 
+    public Filterable(FFmpegCommand command, String argument) {
+        this.command = command;
+        this.argument = argument;
+    }
 }

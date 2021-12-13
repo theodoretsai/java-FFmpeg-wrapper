@@ -22,5 +22,7 @@ public abstract class VisualParam extends Filterable{
         super(command);
     }
 
-
+    public VisualParam(FFmpegCommand command, String argument) {
+        super(command, argument);
+    }
 }

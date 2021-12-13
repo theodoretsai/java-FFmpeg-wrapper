@@ -4,6 +4,7 @@ package com.yeahmobi.wrapper.filterable;
 import com.yeahmobi.wrapper.FFmpegCommand;
 import com.yeahmobi.wrapper.filter.SplitFilter;
 import com.yeahmobi.wrapper.filter.custom.CustomFilter;
+import com.yeahmobi.wrapper.filterable.results.SplitResult;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,13 +16,6 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class AudioParam extends Filterable {
-
-    private String argument;
-
-    @Override
-    public String enclose(){
-        return "["+this.argument+"]";
-    }
 
     public AudioParam fade(boolean isIn, float start, float duration){
         AudioParam result = this.command.getAudioParam();
@@ -35,14 +29,13 @@ public class AudioParam extends Filterable {
         return result;
     }
 
-    public AudioParam(FFmpegCommand command, String arguments) {
+    public AudioParam(FFmpegCommand command) {
         super(command);
-        this.argument = arguments;
     }
 
     public String getMappable() {
         if(this.isSource()){
-            return this.argument;
+            return this.getArgument();
         }else{
             return this.enclose();
         }
@@ -58,7 +51,11 @@ public class AudioParam extends Filterable {
 
     @Override
     public boolean isSource(){
-        return this.argument.matches("0.*|1.*|2.*|3.*|4.*|5.*|6.*|7.*|8.*|9.*");
+        return this.getArgument().matches("0.*|1.*|2.*|3.*|4.*|5.*|6.*|7.*|8.*|9.*");
+    }
+
+    public AudioParam(FFmpegCommand command, String argument) {
+        super(command, argument);
     }
 
     @Override

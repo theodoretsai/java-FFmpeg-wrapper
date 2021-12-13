@@ -1,4 +1,6 @@
-package com.yeahmobi.wrapper.filterable;
+package com.yeahmobi.wrapper.filterable.results;
+
+import com.yeahmobi.wrapper.filterable.Filterable;
 
 public class SplitResult {
 
