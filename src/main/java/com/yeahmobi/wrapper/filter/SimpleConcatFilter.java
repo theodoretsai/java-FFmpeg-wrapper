@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 
 @AllArgsConstructor
-public class ConcatFilter implements Filter {
+public class SimpleConcatFilter implements Filter {
 
     //视频输入
     private List<VideoParam> videoInputs;
@@ -37,12 +37,12 @@ public class ConcatFilter implements Filter {
         for(i=0;i<this.videoInputs.size();i++){
             command.append(this.videoInputs.get(i).enclose());
             if(Objects.nonNull(this.audioInputs) && !this.audioInputs.isEmpty()) {
-                command.append(this.audioInputs.get(i).enclose());
+                    command.append(this.audioInputs.get(i).enclose());
             }
         }
         command.append("concat=n=");
         command.append(this.videoInputs.size());
-        command.append(":v=1:a=0");
+        command.append(":v=1:a=1");
         command.append(output.getVideoParam().enclose());
         command.append(output.getAudioParam().enclose());
 

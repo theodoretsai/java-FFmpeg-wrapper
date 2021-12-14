@@ -1,5 +1,6 @@
 package com.yeahmobi.wrapper;
 
+import com.yeahmobi.wrapper.constant.HWAccelEnum;
 import com.yeahmobi.wrapper.filter.ComplexFilter;
 import com.yeahmobi.wrapper.filterable.results.AVParam;
 import com.yeahmobi.wrapper.source.InputSource;
@@ -19,12 +20,16 @@ import java.util.*;
 @Setter
 public class   FFmpegCommand{
 
+    private List<Argument> inputOptions;
+    private List<Argument> outputOptions;
     private List<InputSource> inputs;
     private ComplexFilter complexFilter;
     private List<Filterable> outputStreams;
     private String output;
     private int vSync = 2;
     private boolean doOverwrite = true;
+
+    private HWAccelEnum hwAccel = HWAccelEnum.DEFAULT;
 
     private int generatorCounter;
 
@@ -53,6 +58,7 @@ public class   FFmpegCommand{
      */
     private CommandLine generate(){
         CommandLine command = new CommandLine("ffmpeg");
+        getInputOptions(this.hwAccel).forEach(i -> command.addArgument(i));
         for(String input: (this.inputs.stream().map(i -> i.getPath()).collect(java.util.stream.Collectors.toList()))){
             command.addArgument("-i");
             command.addArgument(input);
@@ -68,9 +74,35 @@ public class   FFmpegCommand{
             command.addArgument("-map");
             command.addArgument(stream.getMappable());
         }
+        getOutputOptions(this.hwAccel).forEach(i -> command.addArgument(i));
         command.addArgument(this.output);
         return command;
     }
+
+    private List<String> getInputOptions(HWAccelEnum hwAccel){
+        if (hwAccel.getCode() == HWAccelEnum.CUDA.getCode()) {
+            //-hwaccel_output_format cuda -extra_hw_frames 5
+            List<String> options = new ArrayList<>();
+            options.add("-hwaccel");
+            options.add(hwAccel.getValue());
+            options.add("-extra_hw_frames");
+            options.add("5");
+            return options;
+        }
+        return new ArrayList<>();
+    }
+
+    private List<String> getOutputOptions(HWAccelEnum hwAccel){
+        if (hwAccel.getCode() == HWAccelEnum.CUDA.getCode()) {
+            //-c:v h264_nvenc
+            List<String> options = new ArrayList<>();
+            options.add("-c:v");
+            options.add("h264_nvenc");
+            return options;
+        }
+        return new ArrayList<>();
+    }
+
 
     /**
      * Constructor method, maps all the streams from inputs into filterable objects

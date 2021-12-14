@@ -41,7 +41,7 @@ public class FilterFactory {
     }
 
     public static Filter buildConcatFilter(List<VideoParam> concatList, List<AudioParam> audioList, AVParam output) {
-        return new ConcatFilter(concatList, audioList, output);
+        return new SimpleConcatFilter(concatList, audioList, output);
     }
 
     public static Filter buildDarFilter(VisualParam input, VisualParam output, String dar) {

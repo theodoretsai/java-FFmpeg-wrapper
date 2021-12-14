@@ -37,7 +37,11 @@ public class MergingTest {
         concatList.add(split1);
         concatList.add(main);
         concatList.add(split2);
-        AVParam av = VideoParam.concat(concatList,null);
+
+        List<AudioParam> audioList = new ArrayList<>();
+        audioList.add(command.getInputs().get(0).getAudio(command,0));
+
+        AVParam av = VideoParam.concat(concatList,audioList);
         av.getVideoParam().defaultMap();
         av.getAudioParam().defaultMap();
         System.out.println(command.getLoggerMessage());
@@ -146,6 +150,14 @@ public class MergingTest {
         FragmentTemplate intro = new FragmentTemplate("C:/demo/outro.mp4", FragmentStyleEnum.IN_FRAME.getCode(),FragmentStyleEnum.CONCAT.getCode(),1f);
         FragmentTemplate outro = new FragmentTemplate("C:/demo/800x1000.mov", FragmentStyleEnum.FULL_SCREEN.getCode(),FragmentStyleEnum.OVERLAY.getCode(),1f);
         FFmpegMergingService.mergeVideoIntroOutroLogo(inputUrl,outputUrl,videoTemplate,intro, outro,logoList);
+    }
+
+    private String secondsToHHSSMMSSMS(double seconds){
+        int hour = (int) (seconds/3600);
+        int minute = (int) ((seconds-hour*3600)/60);
+        int second = (int) (seconds-hour*3600-minute*60);
+        int millisecond = (int) ((seconds-hour*3600-minute*60-second)*1000);
+        return String.format("%02d:%02d:%02d.%03d",hour,minute,second,millisecond);
     }
 
     @Test
