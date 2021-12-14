@@ -1,10 +1,14 @@
 # java-FFmpeg-wrapper
 An FFmpeg Wrapper with focus on Complex Filter;
 
+#### Still in early stages but usable, contributions and suggestions are always welcome
+
 
 ## UML:
 ![image](https://user-images.githubusercontent.com/48721891/146011261-3cfd0899-3d68-4779-9c5e-95c9c0b34f53.png)
 
+
+## Documentation still sucks ass and may be obsolete, for now it's probably easier to just read code. 
 
 ### Getting Started:
 The first thing we need to take care of is to instantiate the FFmpegCommand Object, we no longer use the builder object, instead we use the constructor which takes a list of url inputs and a single output url where the file will be generated:
