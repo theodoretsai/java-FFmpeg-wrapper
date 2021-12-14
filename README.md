@@ -14,7 +14,7 @@ An FFmpeg Wrapper with focus on Complex Filter;
 The first thing we need to take care of is to instantiate the FFmpegCommand Object, we no longer use the builder object, instead we use the constructor which takes a list of url inputs and a single output url where the file will be generated:
 
 
-
+//
 inputList = Stream.of(
     url1,
     url2
@@ -48,13 +48,13 @@ For concatenating the two videos we first need to set the same DAR:
 
 VideoParam firstOfChain = scaled1.dar("16/9");
 VideoParam lastOfChain = scaled2.dar("16.9");
-
+//
 
 
 Then we concatenate the videos: the static method concat() in VideoParam takes a list of video inputs and a list of audio inputs, sources that have been through a video filter only keep their video channel, the audio channel must be obtained from the source, so for concatenating the previous two videos we must do the following:
 
 
-
+//
 AVParam result = VideoParam.concat(
     Stream.of(
         firstOfChain,
@@ -65,30 +65,30 @@ AVParam result = VideoParam.concat(
         param2.extractAudioTrack();
     )
 );
-
+//
 
 
 We now have the final result which needs to be mapped to the output file, to do that we simply call the mapToOutput() method of the Filterable params:
 
 
-
+//
 result.getVideoParam().mapToOutput();
 result.getAudioParam().mapToOutput();
-
+//
 
 
 The only thing left to do now is to run the command by adding:
 
 
-
+//
 command.run();
-
+//
 
 
 ### An example of a practical usage, merging a template and a video:
 
 
-
+//
 public static void mergeVideoDemo(String inputUrl, String outputUrl, VideoTemplate videoTemplate){
     //Instantiate the command
     FFmpegCommand command = new FFmpegCommand(
@@ -131,11 +131,11 @@ public static void mergeVideoDemo(String inputUrl, String outputUrl, VideoTempla
     //run the command
     command.run();
 }
-
+//
 
 ### Alternative way with method extraction:
 
-
+//
 public static Boolean mergeVideo(String inputUrl, String outputUrl, VideoTemplate videoTemplate) throws MediaMergingToolException {
 
     FFmpegCommand command = new FFmpegCommand(Stream.of(inputUrl,videoTemplate.getUrl()).collect(Collectors.toList()), outputUrl);
@@ -154,3 +154,4 @@ public static VideoParam sizeToVideoBox(VideoParam param, VideoTemplate videoTem
 public static VideoParam sizeToTemplate(VideoParam param, VideoTemplate videoTemplate){
     return param.scale(videoTemplate.getWidth(), videoTemplate.getHeight(), true, true).crop(videoTemplate.getWidth(), videoTemplate.getHeight()).dar(videoTemplate.getRatio());
 }
+//
