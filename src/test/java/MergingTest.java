@@ -14,6 +14,17 @@ import java.util.List;
 
 public class MergingTest {
 
+    @Test
+    public void filterTest() throws IOException{
+        List<String> inputList= new ArrayList<>();
+        inputList.add("C:/demo/irregular.mp4");
+        FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
+        VideoParam main = command.videoFromInput("C:/demo/irregular.mp4");
+        main.scale(1920,1080,true,true).crop(1920,1080).defaultMap();
+        System.out.println(command.getCommand());
+        command.run();
+    }
+
 
     @Test
     public void splitFilterTest() throws IOException{
@@ -22,7 +33,7 @@ public class MergingTest {
         inputList.add("C:/demo/outro.mov");
         FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
 
-        VideoParam main = command.selectVideoChannelFromInput("C:/demo/irregular.mp4");
+        VideoParam main = command.videoFromInput("C:/demo/irregular.mp4");
         main = main.scale(1920,1080,true,true).crop(1920,1080);
         main = main.dar("16/9");
         VideoParam main2 = command.getInputs().get(1).getVideo(command,0);
@@ -44,7 +55,7 @@ public class MergingTest {
         AVParam av = VideoParam.concat(concatList,audioList);
         av.getVideoParam().defaultMap();
         av.getAudioParam().defaultMap();
-        System.out.println(command.getLoggerMessage());
+        System.out.println(command.getCommand());
         System.out.println(command.run());
     }
 
@@ -60,10 +71,10 @@ public class MergingTest {
 
         FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
 
-        VideoParam main = command.selectVideoChannelFromInput("C:/demo/irregular.mp4");
+        VideoParam main = command.videoFromInput("C:/demo/irregular.mp4");
         main = main.filter("crop").addParam("w","1080").addParam("h","610").build();
         System.out.println(main.getClass());
-        System.out.println(main.getCommand().getLoggerMessage());
+        System.out.println(main.getCommand().getCommand());
 
     }
 
@@ -80,13 +91,13 @@ public class MergingTest {
 
         FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
 
-        VideoParam main = command.selectVideoChannelFromInput("C:/demo/irregular.mp4");
-        AudioParam mainAudio = command.selectAudioChannelFromInput("C:/demo/irregular.mp4");
-        ImageParam logo = command.selectImageFromInput("C:/demo/logo2.png");
-        ImageParam frame = command.selectImageFromInput("C:/demo/frame.png");
-        VideoParam intro = command.selectVideoChannelFromInput("C:/demo/outro.mov");
-        AudioParam introAudio = command.selectAudioChannelFromInput("C:/demo/outro.mp4");
-        VideoParam outro = command.selectVideoChannelFromInput("C:/demo/800x1000.mov");
+        VideoParam main = command.videoFromInput("C:/demo/irregular.mp4");
+        AudioParam mainAudio = command.audioFromInput("C:/demo/irregular.mp4");
+        ImageParam logo = command.imageFromInput("C:/demo/logo2.png");
+        ImageParam frame = command.imageFromInput("C:/demo/frame.png");
+        VideoParam intro = command.videoFromInput("C:/demo/outro.mov");
+        AudioParam introAudio = command.audioFromInput("C:/demo/outro.mp4");
+        VideoParam outro = command.videoFromInput("C:/demo/800x1000.mov");
 
         main = main.scale(1080,610,true,true)
         .crop(1080,610)
@@ -107,7 +118,7 @@ public class MergingTest {
         mainAudio.mapToOutput();
 
         try {
-            System.out.println(command.getLoggerMessage());
+            System.out.println(command.getCommand());
             System.out.println(command.run());
         }catch (IOException e) {
             e.printStackTrace();

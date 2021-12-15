@@ -2,6 +2,7 @@ package com.yeahmobi.wrapper.source;
 
 import com.yeahmobi.wrapper.FFmpegCommand;
 import com.yeahmobi.wrapper.filterable.AudioParam;
+import com.yeahmobi.wrapper.filterable.Filterable;
 import com.yeahmobi.wrapper.filterable.ImageParam;
 import com.yeahmobi.wrapper.filterable.VideoParam;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,6 @@ public class InputSource {
 
     private String path;
     private int index;
-
 
     public VideoParam getVideo(FFmpegCommand command){
         return new VideoParam(command, this.index+":v");

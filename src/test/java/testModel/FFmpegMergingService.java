@@ -1,7 +1,6 @@
 package testModel;
 
 import com.yeahmobi.wrapper.*;
-import com.yeahmobi.wrapper.constant.HWAccelEnum;
 import com.yeahmobi.wrapper.filterable.results.AVParam;
 import com.yeahmobi.wrapper.filterable.AudioParam;
 import com.yeahmobi.wrapper.filterable.ImageParam;
@@ -24,10 +23,10 @@ public class FFmpegMergingService {
     public static String mergeVideo(String inputUrl, String outputUrl, VideoTemplate videoTemplate) {
         try {
             FFmpegCommand command = new FFmpegCommand(Stream.of(inputUrl, videoTemplate.getUrl()).collect(Collectors.toList()), outputUrl);
-            VideoParam sized = sizeToVideoBox(command.selectVideoChannelFromInput(inputUrl), videoTemplate);
-            padToTemplate(sized, videoTemplate).overlay(command.selectImageFromInput(videoTemplate.getUrl()), 0, 0).mapToOutput();
-            command.selectAudioChannelFromInput(inputUrl).mapToOutput();
-            System.out.println("Execute command: "+ command.getLoggerMessage());
+            VideoParam sized = sizeToVideoBox(command.videoFromInput(inputUrl), videoTemplate);
+            padToTemplate(sized, videoTemplate).overlay(command.imageFromInput(videoTemplate.getUrl()), 0, 0).mapToOutput();
+            command.audioFromInput(inputUrl).mapToOutput();
+            System.out.println("Execute command: "+ command.getCommand());
             return command.run();
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,12 +42,12 @@ public class FFmpegMergingService {
             List<String> inputList = Stream.of(inputUrl, videoTemplate.getUrl()).collect(Collectors.toList());
             inputList.addAll(logoList.stream().map(LogoTemplate::getUrl).collect(Collectors.toList()));
             FFmpegCommand command = new FFmpegCommand(inputList, outputUrl);
-            VideoParam sized = sizeToVideoBox(command.selectVideoChannelFromInput(inputUrl), videoTemplate);
-            VideoParam main = padToTemplate(sized, videoTemplate).overlay(command.selectImageFromInput(videoTemplate.getUrl()), 0, 0);
+            VideoParam sized = sizeToVideoBox(command.videoFromInput(inputUrl), videoTemplate);
+            VideoParam main = padToTemplate(sized, videoTemplate).overlay(command.imageFromInput(videoTemplate.getUrl()), 0, 0);
             main = applyLogo(main, videoTemplate, logoList);
             main.mapToOutput();
-            command.selectAudioChannelFromInput(inputUrl).mapToOutput();
-            System.out.println("Execute command: "+ command.getLoggerMessage());
+            command.audioFromInput(inputUrl).mapToOutput();
+            System.out.println("Execute command: "+ command.getCommand());
             return command.run();
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,19 +68,19 @@ public class FFmpegMergingService {
                 inputList.add(outro.getUrl());
             }
             FFmpegCommand command = new FFmpegCommand(inputList, outputUrl);
-            VideoParam main = sizeToVideoBox(command.selectVideoChannelFromInput(inputUrl), videoTemplate);
-            AudioParam mainAudio = command.selectAudioChannelFromInput(inputUrl);
+            VideoParam main = sizeToVideoBox(command.videoFromInput(inputUrl), videoTemplate);
+            AudioParam mainAudio = command.audioFromInput(inputUrl);
             //处理嵌入首尾片段
             AVParam mainAV = applyInFrameFragments(command, intro, outro, videoTemplate, inputUrl, main, mainAudio);
             main = mainAV.getVideoParam();
             mainAudio = mainAV.getAudioParam();
-            main = padToTemplate(main, videoTemplate).overlay(command.selectImageFromInput(videoTemplate.getUrl()), 0, 0);
+            main = padToTemplate(main, videoTemplate).overlay(command.imageFromInput(videoTemplate.getUrl()), 0, 0);
             mainAV = applyFullscreenFragments(command, intro, outro, videoTemplate, inputUrl, main, mainAudio);
             main = mainAV.getVideoParam();
             mainAudio = mainAV.getAudioParam();
             main.mapToOutput();
             mainAudio.mapToOutput();
-            System.out.println("Execute command: "+ command.getLoggerMessage());
+            System.out.println("Execute command: "+ command.getCommand());
             return command.run();
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,20 +108,20 @@ public class FFmpegMergingService {
             }
             logoList.stream().forEach(i -> inputList.add(i.getUrl()));
             FFmpegCommand command = new FFmpegCommand(inputList, outputUrl);
-            VideoParam main = sizeToVideoBox(command.selectVideoChannelFromInput(inputUrl), videoTemplate);
-            AudioParam mainAudio = command.selectAudioChannelFromInput(inputUrl);
+            VideoParam main = sizeToVideoBox(command.videoFromInput(inputUrl), videoTemplate);
+            AudioParam mainAudio = command.audioFromInput(inputUrl);
             main = applyLogo(main, videoTemplate, logoList);
             //处理嵌入首尾片段
             AVParam mainAV = applyInFrameFragments(command, intro, outro, videoTemplate, inputUrl, main, mainAudio);
             main = mainAV.getVideoParam();
             mainAudio = mainAV.getAudioParam();
-            main = padToTemplate(main, videoTemplate).overlay(command.selectImageFromInput(videoTemplate.getUrl()), 0, 0);
+            main = padToTemplate(main, videoTemplate).overlay(command.imageFromInput(videoTemplate.getUrl()), 0, 0);
             mainAV = applyFullscreenFragments(command, intro, outro, videoTemplate, inputUrl, main, mainAudio);
             main = mainAV.getVideoParam();
             mainAudio = mainAV.getAudioParam();
             main.mapToOutput();
             mainAudio.mapToOutput();
-            System.out.println("Execute command: "+ command.getLoggerMessage());
+            System.out.println("Execute command: "+ command.getCommand());
             return command.run();
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,7 +132,7 @@ public class FFmpegMergingService {
     public static VideoParam applyLogo(VideoParam main, VideoTemplate videoTemplate, List<LogoTemplate> logoList) {
 
         for (LogoTemplate logo : logoList) {
-            ImageParam sizedLogo = main.getCommand().selectImageFromInput(logo.getUrl()).scale(logo.getHeight() * (videoTemplate.getVideoBoxHeight()) / 1080, -1, false, true);
+            ImageParam sizedLogo = main.getCommand().imageFromInput(logo.getUrl()).scale(logo.getHeight() * (videoTemplate.getVideoBoxHeight()) / 1080, -1, false, true);
             main = main.overlay(sizedLogo, logo.getHorizontalOffset() * videoTemplate.getVideoBoxHeight() / 1080, logo.getVerticalOffset() * videoTemplate.getVideoBoxHeight() / 1080);
         }
         return main;
@@ -149,10 +148,10 @@ public class FFmpegMergingService {
             List<VideoParam> concatList = new ArrayList<>();
             List<AudioParam> audioList = new ArrayList<>();
             if (Objects.nonNull(intro) && intro.getStyle() == FragmentStyleEnum.IN_FRAME.getCode()) {
-                VideoParam sizedIntro = sizeToVideoBox(command.selectVideoChannelFromInput(intro.getUrl()), videoTemplate);
+                VideoParam sizedIntro = sizeToVideoBox(command.videoFromInput(intro.getUrl()), videoTemplate);
                 if (intro.getConcatStyle() == FragmentStyleEnum.CONCAT.getCode()) {
                     concatList.add(sizedIntro);
-                    audioList.add(command.selectAudioChannelFromInput(intro.getUrl()));
+                    audioList.add(command.audioFromInput(intro.getUrl()));
                 }
                 if (intro.getConcatStyle() == FragmentStyleEnum.OVERLAY.getCode()) {
                     Float introDuration = getDurationInSeconds(intro.getUrl());
@@ -161,13 +160,13 @@ public class FFmpegMergingService {
                 }
             }
             if (Objects.nonNull(outro) && outro.getStyle() == FragmentStyleEnum.IN_FRAME.getCode()) {
-                VideoParam sizedOutro = sizeToVideoBox(command.selectVideoChannelFromInput(outro.getUrl()), videoTemplate);
+                VideoParam sizedOutro = sizeToVideoBox(command.videoFromInput(outro.getUrl()), videoTemplate);
                 if (outro.getConcatStyle() == FragmentStyleEnum.CONCAT.getCode()) {
                     concatList.add(main);
                     audioList.add(mainAudio);
 
                     concatList.add(sizedOutro);
-                    audioList.add(command.selectAudioChannelFromInput(outro.getUrl()));
+                    audioList.add(command.audioFromInput(outro.getUrl()));
                 }
                 if (outro.getConcatStyle() == FragmentStyleEnum.OVERLAY.getCode()) {
 
@@ -200,10 +199,10 @@ public class FFmpegMergingService {
             List<VideoParam> concatList = new ArrayList<>();
             List<AudioParam> audioList = new ArrayList<>();
             if (Objects.nonNull(intro) && intro.getStyle() == FragmentStyleEnum.FULL_SCREEN.getCode()) {
-                VideoParam scaledIntro = sizeToTemplate(command.selectVideoChannelFromInput(intro.getUrl()), videoTemplate);
+                VideoParam scaledIntro = sizeToTemplate(command.videoFromInput(intro.getUrl()), videoTemplate);
                 if (intro.getConcatStyle() == FragmentStyleEnum.CONCAT.getCode()) {
                     concatList.add(scaledIntro);
-                    audioList.add(command.selectAudioChannelFromInput(intro.getUrl()));
+                    audioList.add(command.audioFromInput(intro.getUrl()));
                 } else if (intro.getConcatStyle() == FragmentStyleEnum.OVERLAY.getCode()) {
 
                     Float introDuration = getDurationInSeconds(intro.getUrl());
@@ -213,12 +212,12 @@ public class FFmpegMergingService {
             }
 
             if (Objects.nonNull(outro) && outro.getStyle() == FragmentStyleEnum.FULL_SCREEN.getCode()) {
-                VideoParam scaledOutro = sizeToTemplate(command.selectVideoChannelFromInput(outro.getUrl()), videoTemplate);
+                VideoParam scaledOutro = sizeToTemplate(command.videoFromInput(outro.getUrl()), videoTemplate);
                 if (outro.getConcatStyle() == FragmentStyleEnum.CONCAT.getCode()) {
                     concatList.add(main);
                     audioList.add(mainAudio);
                     concatList.add(scaledOutro);
-                    audioList.add(command.selectAudioChannelFromInput(outro.getUrl()));
+                    audioList.add(command.audioFromInput(outro.getUrl()));
                 } else if (outro.getConcatStyle() == FragmentStyleEnum.OVERLAY.getCode()) {
 
                     float duration = getDurationInSeconds(inputUrl);

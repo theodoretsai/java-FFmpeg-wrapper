@@ -9,13 +9,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.PumpStreamHandler;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 
 /**
  * FFmpeg command
  */
+
 @Getter
 @Setter
 public class   FFmpegCommand{
@@ -35,13 +38,10 @@ public class   FFmpegCommand{
 
     /**
      * runs the command in the command line
-     * @return the output of the stdout
+     * outputs to the stdout
      */
     public String run() throws IOException {
         DefaultExecutor executor = new DefaultExecutor();
-        //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        //PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream, outputStream);
-        //executor.setStreamHandler(streamHandler);
         try {
             CommandLine command = generate();
             executor.execute(command);
@@ -49,7 +49,24 @@ public class   FFmpegCommand{
             throw new IOException(e);
         }
         return null;
-        //return outputStream.toString();
+    }
+
+    /**
+     * runs the command in the command line
+     * @return ffmpeg log
+     */
+    public String runAndReturnOutput() throws IOException{
+        DefaultExecutor executor = new DefaultExecutor();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PumpStreamHandler streamHandler = new PumpStreamHandler(outputStream, outputStream);
+        executor.setStreamHandler(streamHandler);
+        try {
+            CommandLine command = generate();
+            executor.execute(command);
+        }catch (Exception e) {
+            throw new IOException(e);
+        }
+        return outputStream.toString();
     }
 
     /**
@@ -103,7 +120,6 @@ public class   FFmpegCommand{
         return new ArrayList<>();
     }
 
-
     /**
      * Constructor method, maps all the streams from inputs into filterable objects
      * @param inputs list of paths of input files
@@ -121,7 +137,7 @@ public class   FFmpegCommand{
         this.outputStreams = new ArrayList<>();
     }
 
-    public VideoParam selectVideoChannelFromInput(String url) {
+    public VideoParam videoFromInput(String url) {
         for(InputSource input: this.inputs){
             if(input.getPath().equals(url)){
                 return input.getVideo(this,0);
@@ -130,7 +146,7 @@ public class   FFmpegCommand{
         throw new IllegalArgumentException("No such input");
     }
 
-    public VideoParam selectVideoChannelFromInput(String url, int channel) {
+    public VideoParam videoFromInput(String url, int channel) {
         for(InputSource input: this.inputs){
             if(input.getPath().equals(url)){
                 return input.getVideo(this,channel);
@@ -139,7 +155,7 @@ public class   FFmpegCommand{
         throw new IllegalArgumentException("No such input");
     }
 
-    public AudioParam selectAudioChannelFromInput(String url) {
+    public AudioParam audioFromInput(String url) {
         for(InputSource input: this.inputs){
             if(input.getPath().equals(url)){
                 return input.getAudio(this,0);
@@ -148,7 +164,7 @@ public class   FFmpegCommand{
         throw new IllegalArgumentException("No such input");
     }
 
-    public AudioParam selectAudioChannelFromInput(String url, int channel) {
+    public AudioParam audioFromInput(String url, int channel) {
         for(InputSource input: this.inputs){
             if(input.getPath().equals(url)){
                 return input.getAudio(this,channel);
@@ -157,7 +173,7 @@ public class   FFmpegCommand{
         throw new IllegalArgumentException("No such input");
     }
 
-    public ImageParam selectImageFromInput(String Url){
+    public ImageParam imageFromInput(String Url){
         for(InputSource input: this.inputs){
             if(input.getPath().equals(Url)){
                 return input.getImage(this);
@@ -169,7 +185,7 @@ public class   FFmpegCommand{
     /**
     * returns the ffmpeg command as a string, useful for server logging
     */
-    public  String getLoggerMessage() {
+    public  String getCommand() {
         StringBuilder message = new StringBuilder();
         message.append("FFmpeg ");
         for (String argument : this.generate().getArguments()) {
@@ -202,5 +218,7 @@ public class   FFmpegCommand{
     public AudioParam getAudioParam(){
         return new AudioParam(this,this.generateIdentifier(MediaTypeEnum.Audio));
     }
+
+
 
 }
