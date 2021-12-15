@@ -4,10 +4,6 @@ An FFmpeg Wrapper with focus on Complex Filter;
 #### Still in early stages but usable, contributions and suggestions are always welcome
 
 
-## UML:
-![image](https://user-images.githubusercontent.com/48721891/146011261-3cfd0899-3d68-4779-9c5e-95c9c0b34f53.png)
-
-
 ## Documentation still sucks ass and may be obsolete, for now it's probably easier to just read code. 
 
 ### Getting Started:
@@ -155,3 +151,8 @@ public static VideoParam sizeToTemplate(VideoParam param, VideoTemplate videoTem
     return param.scale(videoTemplate.getWidth(), videoTemplate.getHeight(), true, true).crop(videoTemplate.getWidth(), videoTemplate.getHeight()).dar(videoTemplate.getRatio());
 }
 ```
+
+
+## UML:
+![image](https://user-images.githubusercontent.com/48721891/146011261-3cfd0899-3d68-4779-9c5e-95c9c0b34f53.png)
+
