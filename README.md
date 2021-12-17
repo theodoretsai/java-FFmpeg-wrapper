@@ -3,9 +3,6 @@ An FFmpeg Wrapper with focus on Video Editing with Complex Filter;
 
 #### Still in early stages but usable, contributions and suggestions are always welcome
 
-
-## Documentation still sucks ass and may be obsolete, for now it's probably easier to just read code. 
-
 ### Getting Started:
 The first thing we need to take care of is to instantiate the FFmpegCommand Object, we no longer use the builder object, instead we use the constructor which takes a list of url inputs and a single output url where the file will be generated:
 
@@ -117,6 +114,6 @@ Full example: scale an input video to standard 1920x1080 resolution and add wate
 
 
 
-## UML:
+## Early design UML:
 ![image](https://user-images.githubusercontent.com/48721891/146011261-3cfd0899-3d68-4779-9c5e-95c9c0b34f53.png)
 
