@@ -80,77 +80,40 @@ The only thing left to do now is to run the command by adding:
 command.run();
 ```
 
-
-### An example of a practical usage, merging a template and a video:
-
-
+Full example: scale an input video to standard 1920x1080 resolution and add watermnark:  
 ```java
-public static void mergeVideoDemo(String inputUrl, String outputUrl, VideoTemplate videoTemplate){
-    //Instantiate the command
-    FFmpegCommand command = new FFmpegCommand(
-            Stream.of(
-                    //input video
-                    inputUrl,
-                    //template model
-                    videoTemplate.getUrl()).collect(
-                            Collectors.toList()
-            ),
-            outputUrl
-    );
-    
-    //get a VideoParam out of inputUrl
-    command.videoFromInput(inputUrl)
-            //scale to the video area
-            .scale(
-                    videoTemplate.getVideoBoxWidth(),
-                    videoTemplate.getVideoBoxHeight(),
-                    true,
-                    true
-            )
-            //pad to the template area
-            .pad(
-                    videoTemplate.getWidth(),
-                    videoTemplate.getHeight(),
-                    videoTemplate.getVideoBoxHorizontalOffset(),
-                    videoTemplate.getVideoBoxVerticalOffset()
-            )
-            //add the template frame
-            .overlay(
-                    command.imageFromInput(videoTemplate.getUrl()),
-                    0,
-                    0
-            )
-            //map the final video to output
-            .mapToOutput();
-    //map the original audio from source video to output
-    command.audioFromInput(inputUrl).mapToOutput();
-    //run the command
-    command.run();
-}
-```
+@Test
+    public void scaleAndWatermark(){
+        try {
+            //initialise the input array
+            List<String> inputList = new ArrayList<>();
+            //add inputs
+            inputList.add("video.mp4");
+            inputList.add("watermark.png");
+            
+            //initialise command with inputs and output path
+            FFmpegCommand command = new FFmpegCommand(inputList, "out.mp4");
+            //initialise Filterables from input paths
+            VideoParam main = command.videoFromInput("video.mp4");
+            ImageParam watermark = command.imageFromInput("watermark.png");
+            
+            //scale to fill 1920x1080 box with forced aspect ratio
+            main.scale(1920, 1080, true, true)
+            //crop the scaled video to 1920x1080 if the original video is not 16/9
+                    .crop(1920, 1080)
+            //add the watermark 20 px to the right and 20 px down from the top left corner
+                    .overlay(watermark, 20, 20)
+            //map the processed video stream to output keeping the original audio
+                    .defaultMap();
+            Logger.getLogger(MergingTest.class.getName()).info(command.getCommand());
+            command.run();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    ```
 
-### Alternative way with method extraction:
 
-```java
-public static Boolean mergeVideo(String inputUrl, String outputUrl, VideoTemplate videoTemplate) throws MediaMergingToolException {
-
-    FFmpegCommand command = new FFmpegCommand(Stream.of(inputUrl,videoTemplate.getUrl()).collect(Collectors.toList()), outputUrl);
-    VideoParam sized = sizeToVideoBox(command.videoFromInput(inputUrl),videoTemplate);
-    padToTemplate(sized,videoTemplate).overlay(command.imageFromInput(videoTemplate.getUrl()),0,0).mapToOutput();
-    command.videoFromInput(inputUrl).extractAudioTrack().mapToOutput();
-    command.run();
-    return true;
-
-}
-
-public static VideoParam sizeToVideoBox(VideoParam param, VideoTemplate videoTemplate){
-    return param.scale(videoTemplate.getVideoBoxWidth(), videoTemplate.getVideoBoxHeight(), true, true).crop(videoTemplate.getVideoBoxWidth(), videoTemplate.getVideoBoxHeight()).dar(videoTemplate.getVideoBoxRatio());
-}
-
-public static VideoParam sizeToTemplate(VideoParam param, VideoTemplate videoTemplate){
-    return param.scale(videoTemplate.getWidth(), videoTemplate.getHeight(), true, true).crop(videoTemplate.getWidth(), videoTemplate.getHeight()).dar(videoTemplate.getRatio());
-}
-```
 
 
 ## UML:
