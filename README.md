@@ -1,5 +1,5 @@
 # java-FFmpeg-wrapper
-An FFmpeg Wrapper with focus on Complex Filter;
+An FFmpeg Wrapper with focus on Video Editing with Complex Filter;
 
 #### Still in early stages but usable, contributions and suggestions are always welcome
 
