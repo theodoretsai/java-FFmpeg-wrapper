@@ -81,6 +81,7 @@ command.run();
 ```
 
 Full example: scale an input video to standard 1920x1080 resolution and add watermnark:  
+
 ```java
 @Test
     public void scaleAndWatermark(){
@@ -111,6 +112,7 @@ Full example: scale an input video to standard 1920x1080 resolution and add wate
             e.printStackTrace();
         }
     }
+    
     ```
 
 
