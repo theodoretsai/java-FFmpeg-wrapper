@@ -117,5 +117,5 @@ Full example: scale an input video to standard 1920x1080 resolution and add wate
 
 
 ## UML:
-![image](https://user-images.githubusercontent.com/48721891/146011261-3cfd0899-3d68-4779-9c5e-95c9c0b34f53.png)[image]
+![image](https://user-images.githubusercontent.com/48721891/146011261-3cfd0899-3d68-4779-9c5e-95c9c0b34f53.png)
 
