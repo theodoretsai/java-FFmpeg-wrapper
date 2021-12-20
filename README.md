@@ -40,7 +40,7 @@ For concatenating the two videos we first need to set the same DAR:
 
 ```java
 VideoParam firstOfChain = scaled1.dar("16/9");
-VideoParam lastOfChain = scaled2.dar("16.9");
+VideoParam lastOfChain = scaled2.dar("16/9");
 ```
 
 
