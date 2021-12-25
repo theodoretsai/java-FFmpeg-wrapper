@@ -11,8 +11,56 @@ import testModel.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class MergingTest {
+
+
+    @Test
+    public void reduceAndPadTest() throws IOException{
+        List<String> inputList = new ArrayList<>();
+        inputList.add("C:/demo/irregular.mp4");
+
+        FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
+        VideoParam main = command.videoFromInput("C:/demo/irregular.mp4");
+        main.reduceAndPad(1920,1080).defaultMap();
+        System.out.println(command.getCommand());
+        command.run();
+    }
+
+
+    @Test
+    public void fillTest() throws IOException{
+        List<String> inputList = new ArrayList<>();
+        inputList.add("C:/demo/irregular.mp4");
+
+        FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
+        VideoParam main = command.videoFromInput("C:/demo/irregular.mp4");
+        main.fill(1920,1080).defaultMap();
+        System.out.println(command.getCommand());
+        command.run();
+
+    }
+
+    @Test
+    public void scaleAndWatermark(){
+        try {
+            List<String> inputList = new ArrayList<>();
+            inputList.add("video.mp4");
+            inputList.add("watermark.png");
+            FFmpegCommand command = new FFmpegCommand(inputList, "out.mp4");
+            VideoParam main = command.videoFromInput("video.mp4");
+            ImageParam watermark = command.imageFromInput("watermark.png");
+            main.scale(1920, 1080, true, true)
+                    .crop(1920, 1080)
+                    .overlay(watermark, 20, 20)
+                    .defaultMap();
+            Logger.getLogger(MergingTest.class.getName()).info(command.getCommand());
+            command.run();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void filterTest() throws IOException{

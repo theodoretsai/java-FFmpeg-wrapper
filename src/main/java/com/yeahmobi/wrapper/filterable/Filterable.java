@@ -65,8 +65,17 @@ public abstract class Filterable {
      */
     public abstract boolean isSource();
 
+    /**
+     * Splits the stream into two copies
+     * @return the two copies as a SplitResult
+     */
     public abstract SplitResult split();
 
+    /**
+     * Applies custom filter to the stream
+     * @param FilterName the name of the filter
+     * @return the Filter
+     */
     public abstract CustomFilter filter(String FilterName);
 
     public Filterable(FFmpegCommand command, String argument) {

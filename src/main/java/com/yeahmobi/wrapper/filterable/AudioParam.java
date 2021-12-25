@@ -17,6 +17,13 @@ import java.util.ArrayList;
 @Setter
 public class AudioParam extends Filterable {
 
+    /**
+     * Fades the audio in or out over the specified duration
+     * @param isIn true if the audio is to be faded in, false if it is to be faded out
+     * @param start the start time of the fade
+     * @param duration the duration of the fade
+     * @return the output stream as an AudioParam
+     */
     public AudioParam fade(boolean isIn, float start, float duration){
         AudioParam result = this.command.getAudioParam();
         this.command.getComplexFilter().addAFadeFilter(
@@ -33,6 +40,7 @@ public class AudioParam extends Filterable {
         super(command);
     }
 
+    @Override
     public String getMappable() {
         if(this.isSource()){
             return this.getArgument();
@@ -41,6 +49,7 @@ public class AudioParam extends Filterable {
         }
     }
 
+    @Override
     public SplitResult split(){
         AudioParam original = this.command.getAudioParam();
         AudioParam copy = this.command.getAudioParam();

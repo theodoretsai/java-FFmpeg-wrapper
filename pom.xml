@@ -31,6 +31,21 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.kokorin.jaffree</groupId>
+            <artifactId>jaffree</artifactId>
+            <version>0.10.0</version>
+        </dependency>
+
+        <!--
+            You should also include slf4j into dependencies.
+            This is done intentionally to allow changing of slf4j version.
+          -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
     </dependencies>
 
     <properties>

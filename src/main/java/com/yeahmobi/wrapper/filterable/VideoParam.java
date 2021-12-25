@@ -76,6 +76,17 @@ public class VideoParam extends VisualParam {
     }
 
     @Override
+    public VideoParam fill(Integer width, Integer height){
+        Float dar = (float)width/height;
+        return this.scale(width,height,true,true).crop(width,height).dar(dar.toString());
+    }
+
+    @Override
+    public VideoParam reduceAndPad(Integer width, Integer height){
+        return this.scale(width,height,true,false).pad(width,height,0,0);
+    }
+
+    @Override
     public VideoParam dar(String dar){
 
         VideoParam result = this.command.getVideoParam();
