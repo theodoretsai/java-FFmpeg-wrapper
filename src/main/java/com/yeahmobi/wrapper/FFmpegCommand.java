@@ -32,6 +32,8 @@ public class   FFmpegCommand{
     private int vSync = 2;
     private boolean doOverwrite = true;
 
+    private CommandConfig config;
+
     private HWAccelEnum hwAccel = HWAccelEnum.DEFAULT;
 
     private int generatorCounter;
@@ -219,6 +221,8 @@ public class   FFmpegCommand{
         return new AudioParam(this,this.generateIdentifier(MediaTypeEnum.Audio));
     }
 
+    public void setToDefault(){
 
+    }
 
 }

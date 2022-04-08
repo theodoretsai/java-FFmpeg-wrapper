@@ -1,6 +1,5 @@
 package com.yeahmobi.wrapper.filter.custom;
 
-import com.google.gson.JsonObject;
 import com.yeahmobi.wrapper.filter.Filter;
 import com.yeahmobi.wrapper.filter.params.CustomParam;
 import com.yeahmobi.wrapper.filterable.Filterable;
