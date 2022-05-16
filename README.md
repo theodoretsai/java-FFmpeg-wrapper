@@ -8,11 +8,11 @@ The first thing we need to take care of is to instantiate the FFmpegCommand Obje
 
 
 ```java
-inputList = Stream.of(
+inputList = Arrays.asList(
     url1,
     url2
-)
-.collect(Collectors.toList());
+);
+
 FFmpegCommand command = new FFmpegCommand(inputList, outputUrl);
 ```
 
@@ -49,11 +49,11 @@ Then we concatenate the videos: the static method concat() in VideoParam takes a
 
 ```java
 AVParam result = VideoParam.concat(
-    Stream.of(
+    Arrays.asList(
         firstOfChain,
         lastOfChain
-    ).collect(Collectors.toList()),
-    Stream.of(
+    );
+    Arrays.asList(
         param1.extractAudioTrack();
         param2.extractAudioTrack();
     )
