@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Concat Filter
+ * Simple Concat Filter
+ * //TODO Full concat filter supporting multiple streams
  * <p>
  * Only supports single video stream and audio stream
- * TODO: rename to simple concat Filter and add a new concat Filter to support multiple streams
  *
  * @author theodore.tsai
  * @date 21/09/2021

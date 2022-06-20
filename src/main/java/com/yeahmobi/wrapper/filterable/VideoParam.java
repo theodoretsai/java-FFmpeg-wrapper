@@ -77,8 +77,8 @@ public class VideoParam extends VisualParam {
 
     @Override
     public VideoParam fill(Integer width, Integer height){
-        Float dar = (float)width/height;
-        return this.scale(width,height,true,true).crop(width,height).dar(dar.toString());
+        float dar = (float)width/height;
+        return this.scale(width,height,true,true).crop(width,height).dar(Float.toString(dar));
     }
 
     @Override
@@ -109,9 +109,8 @@ public class VideoParam extends VisualParam {
         );
         return result;
     }
-    public CustomFilter filter(String filterName){
-        VideoParam result = this.command.getVideoParam();
-        CustomFilter filter = new CustomFilter(this,result,filterName,new ArrayList<>());
+    public CustomFilter<VideoParam> filter(String filterName){
+        CustomFilter<VideoParam> filter = new CustomFilter<>(this,this.command.getVideoParam(),filterName,new ArrayList<>());
         this.getCommand().getComplexFilter().addFilter(filter);
         return filter;
     }
@@ -126,12 +125,9 @@ public class VideoParam extends VisualParam {
         return result;
     }
 
-    public SplitResult split(){
-        VideoParam original = this.command.getVideoParam();
-        VideoParam copy = this.command.getVideoParam();
-        SplitFilter filter = new SplitFilter(this, original,copy);
-        this.command.getComplexFilter().addFilter(filter);
-        return new SplitResult(original,copy);
+    public SplitResult<VideoParam> split(){
+        this.command.getComplexFilter().addFilter( new SplitFilter(this, this.command.getVideoParam(),this.command.getVideoParam()));
+        return new SplitResult<>(this.command.getVideoParam(),this.command.getVideoParam());
     }
 
     public VideoParam(FFmpegCommand command, String argument) {
@@ -148,6 +144,6 @@ public class VideoParam extends VisualParam {
 
     @Override
     public boolean isSource(){
-        return this.getArgument().matches("0.*|1.*|2.*|3.*|4.*|5.*|6.*|7.*|8.*|9.*");
+        return this.getArgument().matches("[0-9].*");
     }
 }

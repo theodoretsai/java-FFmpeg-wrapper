@@ -11,18 +11,18 @@ import java.util.Objects;
 
 @Data
 @AllArgsConstructor
-public class CustomFilter implements Filter {
+public class CustomFilter<T extends Filterable> implements Filter {
 
-    private Filterable input;
-    private Filterable output;
+    private T input;
+    private T output;
     private String filterName;
     private List<CustomParam> params;
 
-    public <T extends Filterable> T build(){
-        return (T) this.output;
+    public  T build(){
+        return this.output;
     }
 
-    public CustomFilter addParam(String param, String value){
+    public CustomFilter<T> addParam(String param, String value){
         this.params.add(new CustomParam(param, value));
         return this;
     }

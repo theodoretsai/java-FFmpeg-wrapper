@@ -88,7 +88,7 @@ public class MergingTest {
         main2 = main2.scale(1920,1080,true,true).crop(1920,1080);
         main2 = main2.dar("16/9");
 
-        SplitResult split = main2.split();
+        SplitResult<VideoParam> split = main2.split();
         VideoParam split1 = split.getFirstCopy();
         VideoParam split2 = split.getSecondCopy();
         List<VideoParam> concatList = new ArrayList<>();

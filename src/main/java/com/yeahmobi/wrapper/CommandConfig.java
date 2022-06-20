@@ -11,7 +11,6 @@ import lombok.Setter;
 @Builder
 public class CommandConfig {
 
-
     private int vSync;
 
     private HWAccelEnum hwAccel;
@@ -19,6 +18,11 @@ public class CommandConfig {
     private int loggingOption;
 
     private int logggingLevel;
+
+
+    // video.mp4
+
+    // ffmpeg -i video.mp4 filer_complex "[v:0]scale=1080:1920[tmp]" -out [tmp] out.mp4
 
 
 

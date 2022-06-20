@@ -1,21 +1,24 @@
 package com.yeahmobi.wrapper.filterable.results;
 
+import com.yeahmobi.wrapper.filter.Filter;
 import com.yeahmobi.wrapper.filterable.Filterable;
 
-public class SplitResult {
+import java.util.List;
 
-    private Filterable firstCopy;
-    private Filterable secondCopy;
+public  class  SplitResult<T extends Filterable> {
 
-    public <T extends Filterable> T getFirstCopy(){
-        return (T) this.firstCopy;
+    private final T firstCopy;
+    private final T secondCopy;
+
+    public T getFirstCopy(){
+        return this.firstCopy;
     }
 
-    public <T extends Filterable> T getSecondCopy(){
-        return (T) this.secondCopy;
+    public T getSecondCopy(){
+        return this.secondCopy;
     }
 
-    public SplitResult(Filterable firstCopy, Filterable secondCopy) {
+    public SplitResult(T firstCopy, T secondCopy) {
         this.firstCopy = firstCopy;
         this.secondCopy = secondCopy;
     }
