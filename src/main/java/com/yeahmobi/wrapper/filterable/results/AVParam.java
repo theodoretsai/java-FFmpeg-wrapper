@@ -15,8 +15,8 @@ import lombok.Getter;
 public class AVParam {
 
     private final FFmpegCommand command;
-    private VideoParam videoParam;
-    private AudioParam audioParam;
+    private final VideoParam videoParam;
+    private final AudioParam audioParam;
 
     public AVParam(VideoParam videoParam, AudioParam audioParam) {
         this.command = videoParam.getCommand();

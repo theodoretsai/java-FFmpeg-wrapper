@@ -84,8 +84,8 @@ public class ImageParam extends VisualParam {
 
     @Override
     public ImageParam fill(Integer width, Integer height){
-        Float dar = (float)width/height;
-        return this.scale(width,height,true,true).crop(width,height).dar(dar.toString());
+        float dar = (float)width/height;
+        return this.scale(width,height,true,true).crop(width,height).dar(Float.toString(dar));
     }
 
     @Override
@@ -123,7 +123,7 @@ public class ImageParam extends VisualParam {
 
 
     public boolean isSource(){
-        return this.getArgument().matches("0.*|1.*|2.*|3.*|4.*|5.*|6.*|7.*|8.*|9.*");
+        return this.getArgument().matches("[0-9].*");
     }
 
 }

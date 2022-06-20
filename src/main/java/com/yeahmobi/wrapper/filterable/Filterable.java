@@ -28,7 +28,7 @@ public abstract class Filterable {
      * @return
      */
     public String enclose(){
-        if(!this.defaultMap){
+        if(Boolean.FALSE.equals(this.defaultMap)){
             return "[" + this.argument + "]";
         }
         return "";

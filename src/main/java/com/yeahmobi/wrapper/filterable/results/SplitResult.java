@@ -1,9 +1,6 @@
 package com.yeahmobi.wrapper.filterable.results;
 
-import com.yeahmobi.wrapper.filter.Filter;
 import com.yeahmobi.wrapper.filterable.Filterable;
-
-import java.util.List;
 
 public  class  SplitResult<T extends Filterable> {
 

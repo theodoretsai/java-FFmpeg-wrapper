@@ -16,34 +16,40 @@ import java.util.logging.Logger;
 public class MergingTest {
 
 
+    public static Float getDurationInSeconds(String inputUrl) throws IOException {
+        FFprobe ffprobe = new FFprobe();
+        FFmpegProbeResult probeResult = ffprobe.probe(inputUrl);
+        FFmpegFormat format = probeResult.getFormat();
+        return Float.valueOf(String.valueOf(format.duration));
+    }
+
     @Test
-    public void reduceAndPadTest() throws IOException{
+    public void reduceAndPadTest() throws IOException {
         List<String> inputList = new ArrayList<>();
         inputList.add("C:/demo/irregular.mp4");
 
         FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
         VideoParam main = command.videoFromInput("C:/demo/irregular.mp4");
-        main.reduceAndPad(1920,1080).defaultMap();
+        main.reduceAndPad(1920, 1080).defaultMap();
         System.out.println(command.getCommand());
         command.run();
     }
 
-
     @Test
-    public void fillTest() throws IOException{
+    public void fillTest() throws IOException {
         List<String> inputList = new ArrayList<>();
         inputList.add("C:/demo/irregular.mp4");
 
         FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
         VideoParam main = command.videoFromInput("C:/demo/irregular.mp4");
-        main.fill(1920,1080).defaultMap();
+        main.fill(1920, 1080).defaultMap();
         System.out.println(command.getCommand());
         command.run();
 
     }
 
     @Test
-    public void scaleAndWatermark(){
+    public void scaleAndWatermark() {
         try {
             List<String> inputList = new ArrayList<>();
             inputList.add("video.mp4");
@@ -63,29 +69,28 @@ public class MergingTest {
     }
 
     @Test
-    public void filterTest() throws IOException{
-        List<String> inputList= new ArrayList<>();
+    public void filterTest() throws IOException {
+        List<String> inputList = new ArrayList<>();
         inputList.add("C:/demo/irregular.mp4");
         FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
         VideoParam main = command.videoFromInput("C:/demo/irregular.mp4");
-        main.scale(1920,1080,true,true).crop(1920,1080).defaultMap();
+        main.scale(1920, 1080, true, true).crop(1920, 1080).defaultMap();
         System.out.println(command.getCommand());
         command.run();
     }
 
-
     @Test
-    public void splitFilterTest() throws IOException{
-        List<String> inputList= new ArrayList<>();
+    public void splitFilterTest() throws IOException {
+        List<String> inputList = new ArrayList<>();
         inputList.add("C:/demo/irregular.mp4");
         inputList.add("C:/demo/outro.mov");
         FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
 
         VideoParam main = command.videoFromInput("C:/demo/irregular.mp4");
-        main = main.scale(1920,1080,true,true).crop(1920,1080);
+        main = main.scale(1920, 1080, true, true).crop(1920, 1080);
         main = main.dar("16/9");
-        VideoParam main2 = command.getInputs().get(1).getVideo(command,0);
-        main2 = main2.scale(1920,1080,true,true).crop(1920,1080);
+        VideoParam main2 = command.getInputs().get(1).getVideo(command, 0);
+        main2 = main2.scale(1920, 1080, true, true).crop(1920, 1080);
         main2 = main2.dar("16/9");
 
         SplitResult<VideoParam> split = main2.split();
@@ -98,9 +103,9 @@ public class MergingTest {
         concatList.add(split2);
 
         List<AudioParam> audioList = new ArrayList<>();
-        audioList.add(command.getInputs().get(0).getAudio(command,0));
+        audioList.add(command.getInputs().get(0).getAudio(command, 0));
 
-        AVParam av = VideoParam.concat(concatList,audioList);
+        AVParam av = VideoParam.concat(concatList, audioList);
         av.getVideoParam().defaultMap();
         av.getAudioParam().defaultMap();
         System.out.println(command.getCommand());
@@ -108,8 +113,8 @@ public class MergingTest {
     }
 
     @Test
-    public void customFilterTest() throws Exception{
-        List<String> inputList= new ArrayList<>();
+    public void customFilterTest() throws Exception {
+        List<String> inputList = new ArrayList<>();
         inputList.add("C:/demo/irregular.mp4");
         inputList.add("C:/demo/outro.mov");
         inputList.add("C:/demo/frame.png");
@@ -120,16 +125,16 @@ public class MergingTest {
         FFmpegCommand command = new FFmpegCommand(inputList, "C:/demo/outpath.mp4");
 
         VideoParam main = command.videoFromInput("C:/demo/irregular.mp4");
-        main = main.filter("crop").addParam("w","1080").addParam("h","610").build();
+        main = main.filter("crop").addParam("w", "1080").addParam("h", "610").build();
         System.out.println(main.getClass());
         System.out.println(main.getCommand().getCommand());
 
     }
 
+    @Test
+    void commandTest() throws IOException {
 
-    @Test void commandTest() throws IOException{
-
-        List<String> inputList= new ArrayList<>();
+        List<String> inputList = new ArrayList<>();
         inputList.add("C:/demo/irregular.mp4");
         inputList.add("C:/demo/outro.mov");
         inputList.add("C:/demo/frame.png");
@@ -147,20 +152,20 @@ public class MergingTest {
         AudioParam introAudio = command.audioFromInput("C:/demo/outro.mp4");
         VideoParam outro = command.videoFromInput("C:/demo/800x1000.mov");
 
-        main = main.scale(1080,610,true,true)
-        .crop(1080,610)
-        .dar("16/9");
+        main = main.scale(1080, 610, true, true)
+                .crop(1080, 610)
+                .dar("16/9");
 
-        intro = intro.scale(1080,610,true,true)
-                .crop(1080,610)
+        intro = intro.scale(1080, 610, true, true)
+                .crop(1080, 610)
                 .dar("16/9");
 
 
         Float startTime = getDurationInSeconds("C:/demo/irregular.mp4") - getDurationInSeconds("C:/demo/outro.mov");
-        main=main.overlay(intro,0,0,startTime,-1f);
-        mainAudio = mainAudio.fade(false,startTime,1f);
-        main = main.pad(1080,1920,0,0).
-        overlay(frame,0,0);
+        main = main.overlay(intro, 0, 0, startTime, -1f);
+        mainAudio = mainAudio.fade(false, startTime, 1f);
+        main = main.pad(1080, 1920, 0, 0).
+                overlay(frame, 0, 0);
 
         main.mapToOutput();
         mainAudio.mapToOutput();
@@ -168,18 +173,12 @@ public class MergingTest {
         try {
             System.out.println(command.getCommand());
             System.out.println(command.run());
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public static Float getDurationInSeconds(String inputUrl) throws IOException {
-        FFprobe ffprobe = new FFprobe();
-        FFmpegProbeResult probeResult = ffprobe.probe(inputUrl);
-        FFmpegFormat format = probeResult.getFormat();
-        return Float.valueOf(String.valueOf(format.duration));
-    }
     @Test
     public void fullMergeTest() {
         String inputUrl = "C:/demo/irregular.mp4";
@@ -206,20 +205,20 @@ public class MergingTest {
                                 0
                         )
                 );
-        FragmentTemplate intro = new FragmentTemplate("C:/demo/outro.mp4", FragmentStyleEnum.IN_FRAME.getCode(),FragmentStyleEnum.CONCAT.getCode(),1f);
-        FragmentTemplate outro = new FragmentTemplate("C:/demo/800x1000.mov", FragmentStyleEnum.FULL_SCREEN.getCode(),FragmentStyleEnum.OVERLAY.getCode(),1f);
-        FFmpegMergingService.mergeVideoIntroOutroLogo(inputUrl,outputUrl,videoTemplate,intro, outro,logoList);
+        FragmentTemplate intro = new FragmentTemplate("C:/demo/outro.mp4", FragmentStyleEnum.IN_FRAME.getCode(), FragmentStyleEnum.CONCAT.getCode(), 1f);
+        FragmentTemplate outro = new FragmentTemplate("C:/demo/800x1000.mov", FragmentStyleEnum.FULL_SCREEN.getCode(), FragmentStyleEnum.OVERLAY.getCode(), 1f);
+        FFmpegMergingService.mergeVideoIntroOutroLogo(inputUrl, outputUrl, videoTemplate, intro, outro, logoList);
     }
 
-    private String secondsToHHSSMMSSMS(double seconds){
-        int hour = (int) (seconds/3600);
-        int minute = (int) ((seconds-hour*3600)/60);
-        int second = (int) (seconds-hour*3600-minute*60);
-        int millisecond = (int) ((seconds-hour*3600-minute*60-second)*1000);
-        return String.format("%02d:%02d:%02d.%03d",hour,minute,second,millisecond);
+    private String secondsToHHSSMMSSMS(double seconds) {
+        int hour = (int) (seconds / 3600);
+        int minute = (int) ((seconds - hour * 3600) / 60);
+        int second = (int) (seconds - hour * 3600 - minute * 60);
+        int millisecond = (int) ((seconds - hour * 3600 - minute * 60 - second) * 1000);
+        return String.format("%02d:%02d:%02d.%03d", hour, minute, second, millisecond);
     }
 
     @Test
-    public void srtTest(){
+    public void srtTest() {
     }
 }
