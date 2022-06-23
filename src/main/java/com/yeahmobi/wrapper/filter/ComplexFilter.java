@@ -1,12 +1,15 @@
 package com.yeahmobi.wrapper.filter;
 
+import com.yeahmobi.wrapper.filter.audio.AFadeFilter;
 import com.yeahmobi.wrapper.filter.custom.CustomFilter;
+import com.yeahmobi.wrapper.filter.params.*;
+import com.yeahmobi.wrapper.filter.visual.*;
 import com.yeahmobi.wrapper.filterable.*;
-import com.yeahmobi.wrapper.filter.visual.FilterChain;
 import com.yeahmobi.wrapper.filterable.results.AVParam;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -26,7 +29,7 @@ public class ComplexFilter {
      * 默认 Constructor
      */
     public ComplexFilter() {
-        this.filters = new ArrayList<>();
+        this.filters = new LinkedList<>();
     }
 
     /**
@@ -74,35 +77,35 @@ public class ComplexFilter {
     }
 
     public ComplexFilter addScaleFilter(VisualParam input, VisualParam output, Integer width, Integer height, Boolean forceAspectRatio, Boolean isIncrease) {
-        return this.addFilter(FilterFactory.buildScaleFilter(input, output, width, height, forceAspectRatio, isIncrease));
+        return this.addFilter(new ScaleFilter(input, output, new ScaleParam(width, height, forceAspectRatio, isIncrease)));
     }
 
     public ComplexFilter addCropFilter(VisualParam input, VisualParam output, Integer width, Integer height) {
-        return this.addFilter(FilterFactory.buildCropFilter(input, output, width, height));
+        return this.addFilter(new CropFilter(input, output, new CropParam(width, height)));
     }
 
     public ComplexFilter addPadFilter(VisualParam input, VisualParam output, Integer width, Integer height, Integer horizontalOffset, Integer verticalOffset) {
-        return this.addFilter(FilterFactory.buildPadFilter(input, output, width, height, horizontalOffset, verticalOffset));
+        return this.addFilter(new PadFilter(input, output, new PadParam(width, height, horizontalOffset, verticalOffset)));
     }
 
     public ComplexFilter addOverLayFilter(VisualParam main, VisualParam overlay, VisualParam output, Integer horizontalOffset, Integer verticalOffset, Float start, Float end) {
-        return this.addFilter(FilterFactory.buildOverlayFilter(main, overlay, output, horizontalOffset, verticalOffset, start, end));
+        return this.addFilter(new OverlayFilter(main,overlay, output, new OverlayParam(horizontalOffset, verticalOffset), new TimeLineParam(start, end)));
     }
 
     public ComplexFilter addOverLayFilter(VisualParam main, VisualParam overlay, VisualParam output, Integer horizontalOffset, Integer verticalOffset) {
-        return this.addFilter(FilterFactory.buildOverlayFilter(main, overlay, output, horizontalOffset, verticalOffset));
+        return this.addFilter(new OverlayFilter(main,overlay, output, new OverlayParam(horizontalOffset, verticalOffset), null));
     }
 
-    public ComplexFilter addConcatFilter(List<VideoParam> videoInputs, List<AudioParam> audioInputs, AVParam outputs) {
-        return this.addFilter(FilterFactory.buildConcatFilter(videoInputs,audioInputs, outputs));
+    public ComplexFilter addConcatFilter(List<VideoParam> concatList, List<AudioParam> audioList, AVParam output) {
+        return this.addFilter(new SimpleConcatFilter(concatList, audioList, output));
     }
 
     public ComplexFilter addDarFilter(VisualParam input, VisualParam output, String dar) {
-        return this.addFilter(FilterFactory.buildDarFilter(input, output, dar));
+        return this.addFilter(new DarFilter(input, output, new DarParam(dar)));
     }
 
     public ComplexFilter addAFadeFilter(AudioParam input, AudioParam output, Boolean isIn, Float start, Float duration) {
-        return this.addFilter(FilterFactory.buildAfadeFilter(input, output, start, duration, isIn));
+        return this.addFilter(new AFadeFilter(input, output, new AFadeParam(isIn, start, duration, null)));
     }
 
     public ComplexFilter addCustomFilter(Filterable input, Filterable output, String filterName) {

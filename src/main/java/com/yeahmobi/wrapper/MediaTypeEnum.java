@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum MediaTypeEnum {
 
-        Video(0, "video"),
-        Audio(1, "audio"),
-        Image(2, "image"),
+        VIDEO(0, "video"),
+        AUDIO(1, "audio"),
+        IMAGE(2, "image"),
     ;
         private Integer code;
         private String desc;

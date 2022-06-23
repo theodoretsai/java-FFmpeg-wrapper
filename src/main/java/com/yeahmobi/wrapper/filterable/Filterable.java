@@ -78,7 +78,7 @@ public abstract class Filterable {
      */
     public abstract CustomFilter filter(String FilterName);
 
-    public Filterable(FFmpegCommand command, String argument) {
+    protected Filterable(FFmpegCommand command, String argument) {
         this.command = command;
         this.argument = argument;
     }

@@ -23,7 +23,7 @@ public class AFadeFilter implements Filter{
         }else{
             command.append(":st");
         }
-        command.append("="+param.getStart());
+        command.append("=").append(param.getStart());
         command.append(":d=");
         command.append(param.getDuration());
         command.append(output.enclose());

@@ -29,7 +29,6 @@ public class SimpleConcatFilter implements Filter {
     //输出：视频为 output， 音频为 output_a
     private AVParam output;
 
-
     @Override
     public String generateFilter() {
         StringBuilder command = new StringBuilder();

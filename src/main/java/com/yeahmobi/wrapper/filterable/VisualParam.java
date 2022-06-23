@@ -30,12 +30,12 @@ public abstract class VisualParam extends Filterable{
 
     /**
      * Overlays a specified stream onto the one the method is called upon
-     * @param overlayed the stream to overlay onto the original
+     * @param overlaid the stream to overlay onto the original
      * @param horizontalOffset the horizontal offset to the right from the top left corner in pixels
      * @param verticalOffset the vertical offset upwards from the top left corner in pixels
-     * @return the overlayed video stream as a VisualParam
+     * @return the overlaid video stream as a VisualParam
      */
-    public abstract VisualParam overlay(VisualParam overlayed, Integer horizontalOffset, Integer verticalOffset);
+    public abstract VisualParam overlay(VisualParam overlaid, Integer horizontalOffset, Integer verticalOffset);
 
     /**
      * Changes the DAR to a specified value

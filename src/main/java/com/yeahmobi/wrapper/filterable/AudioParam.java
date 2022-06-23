@@ -50,12 +50,12 @@ public class AudioParam extends Filterable {
     }
 
     @Override
-    public SplitResult split(){
+    public SplitResult<AudioParam> split(){
         AudioParam original = this.command.getAudioParam();
         AudioParam copy = this.command.getAudioParam();
         SplitFilter filter = new SplitFilter(this,original,copy);
         this.command.getComplexFilter().addFilter(filter);
-        return new SplitResult(original,copy);
+        return new SplitResult<>(original,copy);
     }
 
     @Override
@@ -68,9 +68,9 @@ public class AudioParam extends Filterable {
     }
 
     @Override
-    public CustomFilter filter(String filterName){
+    public CustomFilter<AudioParam> filter(String filterName){
         AudioParam result = this.command.getAudioParam();
-        CustomFilter filter = new CustomFilter(this,result,filterName,new ArrayList<>());
+        CustomFilter<AudioParam> filter = new CustomFilter<>(this,result,filterName,new ArrayList<>());
         this.getCommand().getComplexFilter().addFilter(filter);
         return filter;
     }

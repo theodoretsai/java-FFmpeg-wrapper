@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author theodore.tsai
  */
-
+@Deprecated
 //TODO: there is actually no need for a factory, using a constructor in the .addFilter() would be enough since creating filter is a stateless operation.
 public class FilterFactory {
 

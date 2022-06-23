@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a singlevideo stream
+ * Represents a single video stream
  * [x:v:x]
  */
 
@@ -49,11 +49,11 @@ public class VideoParam extends VisualParam {
     }
 
     @Override
-    public VideoParam overlay(VisualParam overlayed, Integer horizontalOffset, Integer verticalOffset){
+    public VideoParam overlay(VisualParam overlaid, Integer horizontalOffset, Integer verticalOffset){
         VideoParam result = this.command.getVideoParam();
         this.getCommand().getComplexFilter().addOverLayFilter(
                 this,
-                overlayed,
+                overlaid,
                 result,
                 horizontalOffset,
                 verticalOffset
@@ -61,11 +61,11 @@ public class VideoParam extends VisualParam {
         return result;
     }
 
-    public VideoParam overlay(VideoParam overlayed, Integer horizontalOffset, Integer verticalOffset, Float start, Float end){
+    public VideoParam overlay(VideoParam overlaid, Integer horizontalOffset, Integer verticalOffset, Float start, Float end){
         VideoParam result = this.command.getVideoParam();
         this.getCommand().getComplexFilter().addOverLayFilter(
                 this,
-                overlayed,
+                overlaid,
                 result,
                 horizontalOffset,
                 verticalOffset,

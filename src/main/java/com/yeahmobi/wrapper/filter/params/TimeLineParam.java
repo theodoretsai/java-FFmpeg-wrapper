@@ -15,24 +15,24 @@ public class TimeLineParam {
     public static final String LESS_THAN = "lt";
     public static final String BETWEEN = "between";
 
-    private Float Start;
-    private Float End;
+    private Float from;
+    private Float to;
     private String type;
 
-    public TimeLineParam(Float start, Float end) {
-        Start = start;
-        End = end;
-        if(start == -1){
+    public TimeLineParam(Float from, Float to) {
+        this.from = from;
+        this.to = to;
+        if(from == -1){
             type = LESS_THAN;
-        }else if(end == -1) {
+        }else if(to == -1) {
             type = GREATER_THAN;
-        }else if(start>=0 && end >=0){
+        }else if(from >=0 && to >=0){
             type = BETWEEN;
         }
-        if(start == -1 && end == -1){
+        if(from == -1 && to == -1){
             throw new IllegalArgumentException("Must have at least a starting point or an ending point: start and end cannot both be -1");
         }
-        if(start > end && end != -1){
+        if(from > to && to != -1){
             throw new IllegalArgumentException("Start timestamp cannot be after end timestamp");
         }
     }

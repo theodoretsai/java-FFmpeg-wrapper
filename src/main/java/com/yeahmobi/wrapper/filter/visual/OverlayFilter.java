@@ -6,7 +6,6 @@ import com.yeahmobi.wrapper.filter.params.OverlayParam;
 import com.yeahmobi.wrapper.filter.params.TimeLineParam;
 import lombok.AllArgsConstructor;
 
-import java.text.MessageFormat;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -26,7 +25,7 @@ public class OverlayFilter implements Filter {
         if(Objects.nonNull(timeLineParam)) {
             command.append(overlay.enclose());
             command.append("setpts=PTS+");
-            command.append(timeLineParam.getStart());
+            command.append(timeLineParam.getFrom());
             command.append("/TB");
             command.append("[pts];");
         }
@@ -41,14 +40,14 @@ public class OverlayFilter implements Filter {
             command.append(":enable=");
             if(timeLineParam.getType() == TimeLineParam.BETWEEN){
                 command.append("\'between(t,")
-                        .append(timeLineParam.getStart()+",")
-                        .append(timeLineParam.getEnd()+")'");
+                        .append(timeLineParam.getFrom()+",")
+                        .append(timeLineParam.getTo()+")'");
             }else if(timeLineParam.getType() == TimeLineParam.GREATER_THAN){
                 command.append("'gt(t,")
-                        .append(timeLineParam.getStart()+")'");
+                        .append(timeLineParam.getFrom()+")'");
             }else if(timeLineParam.getType() == TimeLineParam.LESS_THAN) {
                 command.append("'lt(t,")
-                        .append(timeLineParam.getEnd() + ")'");
+                        .append(timeLineParam.getTo() + ")'");
             }
         }
         if (output != null) {

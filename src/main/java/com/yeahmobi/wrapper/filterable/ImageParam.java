@@ -4,14 +4,15 @@ import com.yeahmobi.wrapper.FFmpegCommand;
 import com.yeahmobi.wrapper.filter.SplitFilter;
 import com.yeahmobi.wrapper.filter.custom.CustomFilter;
 import com.yeahmobi.wrapper.filterable.results.SplitResult;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
 /**
  * An image Stream (e.g. image1.jpg)
  * There is no actual distinction in FFmpeg between image and videos,
- * but there are video filters that don't apply to images.
+ * but there are video filters that don't apply to image.
  * @Author: theodore.tsai
  */
 @Getter
@@ -47,11 +48,11 @@ public class ImageParam extends VisualParam {
     }
 
     @Override
-    public ImageParam overlay(VisualParam overlayed, Integer horizontalOffset, Integer verticalOffset){
+    public ImageParam overlay(VisualParam overlaid, Integer horizontalOffset, Integer verticalOffset){
         ImageParam result = this.command.getImageParam();
         this.getCommand().getComplexFilter().addOverLayFilter(
                 this,
-                overlayed,
+                overlaid,
                 result,
                 horizontalOffset,
                 verticalOffset
@@ -94,19 +95,19 @@ public class ImageParam extends VisualParam {
     }
 
     @Override
-    public CustomFilter filter(String filterName) {
-        AudioParam result = this.command.getAudioParam();
-        CustomFilter filter = new CustomFilter(this,result,filterName,new ArrayList<>());
+    public CustomFilter<ImageParam> filter(String filterName) {
+        ImageParam result = this.command.getImageParam();
+        CustomFilter<ImageParam> filter = new CustomFilter<>(this,result,filterName,new ArrayList<>());
         this.getCommand().getComplexFilter().addFilter(filter);
         return filter;
     }
 
-    public SplitResult split(){
+    public SplitResult<ImageParam> split(){
         ImageParam original = this.command.getImageParam();
         ImageParam copy = this.command.getImageParam();
         SplitFilter filter = new SplitFilter(this, original,copy);
         this.command.getComplexFilter().addFilter(filter);
-        return new SplitResult(original,copy);
+        return new SplitResult<>(original,copy);
     }
 
     public ImageParam(FFmpegCommand command, String argument) {

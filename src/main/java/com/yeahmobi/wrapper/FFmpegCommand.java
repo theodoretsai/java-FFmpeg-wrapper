@@ -77,8 +77,8 @@ public class   FFmpegCommand{
      */
     private CommandLine generate(){
         CommandLine command = new CommandLine("ffmpeg");
-        getInputOptions(this.hwAccel).forEach(i -> command.addArgument(i));
-        for(String input: (this.inputs.stream().map(i -> i.getPath()).collect(java.util.stream.Collectors.toList()))){
+        getInputOptions(this.hwAccel).forEach(command::addArgument);
+        for(String input: (this.inputs.stream().map(InputSource::getPath).collect(java.util.stream.Collectors.toList()))){
             command.addArgument("-i");
             command.addArgument(input);
         }
@@ -93,13 +93,13 @@ public class   FFmpegCommand{
             command.addArgument("-map");
             command.addArgument(stream.getMappable());
         }
-        getOutputOptions(this.hwAccel).forEach(i -> command.addArgument(i));
+        getOutputOptions(this.hwAccel).forEach(command::addArgument);
         command.addArgument(this.output);
         return command;
     }
 
     private List<String> getInputOptions(HWAccelEnum hwAccel){
-        if (hwAccel.getCode() == HWAccelEnum.CUDA.getCode()) {
+        if (Objects.equals(hwAccel.getCode(), HWAccelEnum.CUDA.getCode())) {
             //-hwaccel_output_format cuda -extra_hw_frames 5
             List<String> options = new ArrayList<>();
             options.add("-hwaccel");
@@ -112,7 +112,7 @@ public class   FFmpegCommand{
     }
 
     private List<String> getOutputOptions(HWAccelEnum hwAccel){
-        if (hwAccel.getCode() == HWAccelEnum.CUDA.getCode()) {
+        if (Objects.equals(hwAccel.getCode(), HWAccelEnum.CUDA.getCode())) {
             //-c:v h264_nvenc
             List<String> options = new ArrayList<>();
             options.add("-c:v");
@@ -203,26 +203,26 @@ public class   FFmpegCommand{
     }
 
     public VideoParam getVideoParam(){
-        return new VideoParam(this, this.generateIdentifier(MediaTypeEnum.Video));
+        return new VideoParam(this, this.generateIdentifier(MediaTypeEnum.VIDEO));
     }
 
     public AVParam getAVParam(){
         return new AVParam(
-                new VideoParam(this,this.generateIdentifier(MediaTypeEnum.Video)),
-                new AudioParam(this,this.generateIdentifier(MediaTypeEnum.Audio))
+                new VideoParam(this,this.generateIdentifier(MediaTypeEnum.VIDEO)),
+                new AudioParam(this,this.generateIdentifier(MediaTypeEnum.AUDIO))
         );
     }
 
     public ImageParam getImageParam(){
-        return new ImageParam(this,this.generateIdentifier(MediaTypeEnum.Image));
+        return new ImageParam(this,this.generateIdentifier(MediaTypeEnum.IMAGE));
     }
 
     public AudioParam getAudioParam(){
-        return new AudioParam(this,this.generateIdentifier(MediaTypeEnum.Audio));
+        return new AudioParam(this,this.generateIdentifier(MediaTypeEnum.AUDIO));
     }
 
     public void setToDefault(){
-
+        //TODO
     }
 
 }

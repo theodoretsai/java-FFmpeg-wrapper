@@ -1,6 +1,6 @@
 package com.yeahmobi.wrapper.filter;
 
-public interface Filter {
+public interface Filter{
 
     String generateFilter();
 
