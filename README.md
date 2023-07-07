@@ -81,34 +81,34 @@ Full example: scale an input video to standard 1920x1080 resolution and add wate
 
 ```java
 @Test
-    public void scaleAndWatermark(){
-        try {
-            //initialise the input array
-            List<String> inputList = new ArrayList<>();
-            //add inputs
-            inputList.add("video.mp4");
-            inputList.add("watermark.png");
-            
-            //initialise command with inputs and output path
-            FFmpegCommand command = new FFmpegCommand(inputList, "out.mp4");
-            //initialise Filterables from input paths
-            VideoParam main = command.videoFromInput("video.mp4");
-            ImageParam watermark = command.imageFromInput("watermark.png");
-            
-            //scale to fill 1920x1080 box with forced aspect ratio
-            main.scale(1920, 1080, true, true)
-            //crop the scaled video to 1920x1080 if the original video is not 16/9
-                    .crop(1920, 1080)
-            //add the watermark 20 px to the right and 20 px down from the top left corner
-                    .overlay(watermark, 20, 20)
-            //map the processed video stream to output keeping the original audio
-                    .defaultMap();
-            Logger.getLogger(MergingTest.class.getName()).info(command.getCommand());
-            command.run();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+public void scaleAndWatermark(){
+    try {
+        //initialise the input array
+        List<String> inputList = new ArrayList<>();
+        //add inputs
+        inputList.add("video.mp4");
+        inputList.add("watermark.png");
+        
+        //initialise command with inputs and output path
+        FFmpegCommand command = new FFmpegCommand(inputList, "out.mp4");
+        //initialise Filterables from input paths
+        VideoParam main = command.videoFromInput("video.mp4");
+        ImageParam watermark = command.imageFromInput("watermark.png");
+        
+        //scale to fill 1920x1080 box with forced aspect ratio
+        main.scale(1920, 1080, true, true)
+        //crop the scaled video to 1920x1080 if the original video is not 16/9
+                .crop(1920, 1080)
+        //add the watermark 20 px to the right and 20 px down from the top left corner
+                .overlay(watermark, 20, 20)
+        //map the processed video stream to output keeping the original audio
+                .defaultMap();
+        Logger.getLogger(MergingTest.class.getName()).info(command.getCommand());
+        command.run();
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
 ```
 
 
